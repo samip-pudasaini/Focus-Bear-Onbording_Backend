@@ -31,3 +31,11 @@ Agile ceremonies help keep everyone informed about progress, priorities and bloc
 I think daily stand-ups are the most important for my role because they provide a quick way to communicate my progress, raise blockers and understand what the rest of the team is working on. This is especially useful when working remotely or asynchronously.
 
 ## Tasks
+### Stand-Up Observation
+During the stand-up, I observed that team members gave short updates about their current work and mentione dany blockers or issues. This made it easy to understand the team's progress without spending too much time in the meeting.
+
+### Retrospective
+The retrospective provides an opportunity for the team to discuss what went well and what could be improved. Reviewing these discussions show that small changes to communication and processes can improve the team's efficiency over time.
+
+### One Change I Can Make
+One change I can make to improve team collaboration is to provide clearer updates about my work, especially when I am blocked or need help. Instead of waiting until the next meeting, I can communicate important blockers asynchronously so other team members have a chance to respond earlier.
