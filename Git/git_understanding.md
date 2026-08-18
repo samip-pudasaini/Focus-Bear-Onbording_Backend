@@ -43,3 +43,6 @@
 
     git bisect is much faster and more efficient than manually reviewing commits, especially when a project has many commits. Instead of checking each commit one by one, git bisect uses a binary search to repeatedly narrow down the range between a known working and broken version. 
     Manual reviewing can take a lot of time and may require reading large amounts of code, while git bisect can identify the problematic commit with only a few tests. How ever, manual review can still be useful after git bisect identifies the commit because developers can then examine the exact code changes to understand and fix the problem.
+
+# Git Commands and when to use them
+This line was added on the test-rip branch.
