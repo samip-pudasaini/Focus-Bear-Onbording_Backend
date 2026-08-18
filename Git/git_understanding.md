@@ -34,3 +34,12 @@
 
 ## How can poor commit messaged cause issues later?\
     Poor commit messages can cause issues later because they make it difficult for team members to understand what was changed and why. This can make debugging, code reviews, and merging branches more difficult and time-consuming. Developers may also struggle to find or revert specific changes when needed. Clear commit messages provide useful context and help the team understand the project's history.
+
+
+# Git bisect
+    git bisect is a debugging tool that uses binary search to find the exact commit that introduced a bug or regression into your codebase. By splitting the commit history in half at each step, it dramatically reduces the number of commits you need to manually test. For example, searching through 1000 commits only take about 10 steps.
+
+    You would use git bisect in a real-world debugging situation when a bug exists in the current version of a project, but you do not know which recent commit introduced it. For example, if an application was working correctly last week but is now crashing after several developers made changes, you could use git bisect to identify the problematic commit. you would mark a known working commit as good and the current broken commit as bad, then Git would check commits between them using binary search. This is useful because it can quickly narrow down the exact change responsible for the bug instead of manually reviewing every commit.
+
+    git bisect is much faster and more efficient than manually reviewing commits, especially when a project has many commits. Instead of checking each commit one by one, git bisect uses a binary search to repeatedly narrow down the range between a known working and broken version. 
+    Manual reviewing can take a lot of time and may require reading large amounts of code, while git bisect can identify the problematic commit with only a few tests. How ever, manual review can still be useful after git bisect identifies the commit because developers can then examine the exact code changes to understand and fix the problem.
