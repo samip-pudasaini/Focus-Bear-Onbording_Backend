@@ -59,3 +59,13 @@
 
 ## What surprised you while testing these commands?
     What surprised me was how specific Git can be when working with changes. I initially expected git checkout main -- <file> to affect the whole branch, but it only restored the selected file. I also found git cherry-pick useful because it allowed me to take one specific commit without merging everything from the other branch. Using git log and git blame also showed me how much information Git keeps about the history of a project. These commands made me realise that Git is not only useful for saving versions of code but also for investigating, managing, and understanding changes in a project.
+
+# Git Branching
+## Why is pushing directly to main problematic?
+    Pushing directly to main is problematic, or untested code into the main version of the project. If multiple developers push changes directly to main, it can also become difficult to track who made a change or why it was made. A mistake pushed to main could affect other team members and potentially break the application. Using branches allows developers to work on changes separately before they are added to the main project.\
+
+## How do branches help with reviewing code?
+    Branches allow developers to work on features, bug fixes, or other changes without affecting main. Once the work is ready, the branch can be submitted as a pull request so other team members can review the changes before they are merged. This gives the team an opportunity to identify bugs, suggest improvements, and make sure the code meets project requirements. It also makes collaboratiuon safer because changes are reviewed before becoming part of the main codebase.
+
+## What happens if two people edit the same file on different branches?
+    If two people edit different parts of the same file on separate branches, Git can oftern merge the changes automatically. However, if they modify the same lines or nearby sections, Git may produce a merge conflict. The developers then need to manually review the conflicting changes and decide which version to keep or how to combine them. This is one reason why communicating with team members and regularly synchronising branches is important in a collaborative project.
