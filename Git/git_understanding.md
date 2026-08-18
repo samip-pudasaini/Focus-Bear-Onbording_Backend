@@ -69,3 +69,5 @@
 
 ## What happens if two people edit the same file on different branches?
     If two people edit different parts of the same file on separate branches, Git can oftern merge the changes automatically. However, if they modify the same lines or nearby sections, Git may produce a merge conflict. The developers then need to manually review the conflicting changes and decide which version to keep or how to combine them. This is one reason why communicating with team members and regularly synchronising branches is important in a collaborative project.
+![branches create](<Screenshot 2026-08-18 162715.png>)
+![minor changes and commit to new branch](<Screenshot 2026-08-18 163117.png>)
