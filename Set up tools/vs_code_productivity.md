@@ -21,3 +21,10 @@
 
 ### Terminal
 - Toggle Integrated Terminal: Ctrl + `
+
+## Reflection
+### Which shortcuts will help me most daily?
+The shortcuts I will use most often are Ctrl + P, Ctrl + D, Alt + Up/Down, and Ctrl + /. Ctrl + P will help me quickly navigate between files without manually searching through the project structure. Ctrl + D will be useful when editing repeated code or variable names. Alt + Up/Down will make rearranging code easier, while Ctrl + / will allow me to quickly comment and uncomment code during development and testing.
+
+### How will shortcuts improve my productivity?
+Using keyboard shortcuts will reduce the amount of time I spend switching between the keyboard and mouse and navigating through menus. This will make common tasks such as opening files, editing repeated code, navigating through definitions, and debugging much faster. Over time, becoming familiar with these shortcuts should make my workflow more efficient and allow me to focus more on solving problems rather than navigating the development environment.
