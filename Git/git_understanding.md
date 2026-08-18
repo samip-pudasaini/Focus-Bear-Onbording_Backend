@@ -71,3 +71,23 @@
     If two people edit different parts of the same file on separate branches, Git can oftern merge the changes automatically. However, if they modify the same lines or nearby sections, Git may produce a merge conflict. The developers then need to manually review the conflicting changes and decide which version to keep or how to combine them. This is one reason why communicating with team members and regularly synchronising branches is important in a collaborative project.
 ![branches create](<Screenshot 2026-08-18 162715.png>)
 ![minor changes and commit to new branch](<Screenshot 2026-08-18 163117.png>)
+
+# Staging vs Committing
+## What is the difference between staging and commiting?
+    Imagine you are doing online shopping. You browse through the pages of your favorite online store and add some products to your shopping cart. The shopping cart is like staging. Things are there ready to be paid for. You can keep adding stuff to it or remove some from it.
+    When you are done shopping, you go and pay for the things in your shopping cart. That can be compared to making a commit. Now there is a record somewhere of what you have bought and when. There is a history.
+    Notice that you can easily change your mind when things are in staging, but once you have made a commit things are hard to change (although not impossible!).
+
+## Why does Git separate these two steps?
+    The fact that you need to stage and commit separately in Git has many benefits. Generally it is a good idea to make your commits small. And to make sure that all the changes that are included in one commit are related to each other.
+
+    For examplet a commit that fixes a bug in Feature A should not also include an improvement you made to Feature B. If you have done two things at once, you should not commit everything at once. You should seperate them by staging the bug fixes and committing those first and then staging the improvements to Feature and making a second commit.
+
+    That way, if someone looks at the Git history of your project, they are not confused by one giant commit that did a lot of things. They can see clearly that you performed two different tasks: one bug fix in Feature A and one improvement to Feature B.
+
+## When would you want to stage changes without committing?
+    You would want to stage changes without committing when you want to prepare specific changes for the next commit but are not ready to permanently record them in the Git history.
+    For example, you might stage your completed changes, review them with 
+    git diff --cached, 
+    and make sure everything is correct before committing. It can also be useful when you have multiple changes but only want to commit some of them.
+
