@@ -45,4 +45,17 @@
     Manual reviewing can take a lot of time and may require reading large amounts of code, while git bisect can identify the problematic commit with only a few tests. How ever, manual review can still be useful after git bisect identifies the commit because developers can then examine the exact code changes to understand and fix the problem.
 
 # Git Commands and when to use them
-This line was added on the test-rip branch.
+## What does each command do?
+    ``` git checkout main -- <file> ```-> This command restores a specific file to the version that exists on the main branch. It is useful because it only affects the selected file instead of changing other files or branches. During testing, I modified git_understanding.md and then used git checkout main -- git_understanding.md to restore it.
+
+    ``` git cherry-pick <commit> ``` -> git cherry-pick applies a specific commit from another branch to the current branch without merging the entire branch. During testing, I created a commit on test-rip, switched to main, and cherry-picked that commit. This allowed me to bring only the required change into main.
+
+    ``` git log ``` ->  git log displays the commit history of a repository. It shows information such as commit IDs, authors, dates, and commit messages. I used it to view the changes I had made and find the commit ID needed for the cherry-pick test.
+
+    ``` git blame <file> ``` -> git blame shows which commit and author last modified each line of a file. It can help trace a particular line of code back to the change that introduced or modified it. I used it to examine the history of my file and see which commits were responsible for different lines.
+
+## When would you use these commands in a real project?
+    I would use these commands regularly when working on a large project with multiple developers. git checkout main -- <file> would be useful when I accidentally make unwanted changes to one file but want to keep my other work. git cherry-pick would be useful when a specific bug fix or important change needs to be moved from one branch to another without merging unfinished work. git log would help me understand how the project has developed and investigate previous changes. git blame would be useful when debugging or trying to understand why a particular line of code was changed and which commit introduced it.
+
+## What surprised you while testing these commands?
+    What surprised me was how specific Git can be when working with changes. I initially expected git checkout main -- <file> to affect the whole branch, but it only restored the selected file. I also found git cherry-pick useful because it allowed me to take one specific commit without merging everything from the other branch. Using git log and git blame also showed me how much information Git keeps about the history of a project. These commands made me realise that Git is not only useful for saving versions of code but also for investigating, managing, and understanding changes in a project.
