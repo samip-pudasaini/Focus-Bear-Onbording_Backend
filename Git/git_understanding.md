@@ -91,3 +91,4 @@
     git diff --cached, 
     and make sure everything is correct before committing. It can also be useful when you have multiple changes but only want to commit some of them.
 
+![staging vs committing](<Screenshot 2026-08-18 164547.png>)
