@@ -72,6 +72,11 @@
 ![branches create](<Screenshot 2026-08-18 162715.png>)
 ![minor changes and commit to new branch](<Screenshot 2026-08-18 163117.png>)
 
+The branch I created was test-rip and the change done is adding a line in the README. 
+![In the branch](<Screenshot 2026-08-18 171827.png>)
+![In main](<Screenshot 2026-08-18 172045.png>)
+We can see in main that the README has no change, and is different from the branch.
+
 # Staging vs Committing
 ## What is the difference between staging and commiting?
     Imagine you are doing online shopping. You browse through the pages of your favorite online store and add some products to your shopping cart. The shopping cart is like staging. Things are there ready to be paid for. You can keep adding stuff to it or remove some from it.
