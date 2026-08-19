@@ -201,7 +201,7 @@ private void DisplayOrderSummary(double subtotal, double tax, double total)
 
     Refactoring improved the structure by separating the different tasks into individual functions. Instead of having one large function responsible for validation, calculations, discounts, tax, and displaying results, each task now has its own function. The main ProcessOrder() function is therefore shorter and easier to understand, while the supporting functions make the code more organised and maintainable.
 
-## Don't Repeat Yourself (DRY)
+# Don't Repeat Yourself (DRY)
 DRY is a software development principle that avoids duplication of logic by promoting reusable components and code. It ensures changes are made in one place, improving maintainability and consistency. DRY works with modular design and SRP to build scalable and efficient systems.
 
 - Promotes code reuse by reducing duplication and ensuring consistency across the codebase
@@ -313,3 +313,49 @@ private void DisplayTotal(double total)
 
 ### How did refactoring improve maintainability?
     Refactoring removed the repeated code by placing common logic into separate reusable methods. This makes the code shorter, easier to read, and easier to update. Now, if a calculation or rule needs to change, I only need to modify it in one place. This reduces errors and makes the program easier to maintain in the future.
+
+
+# Commenting and Documentation
+## Best Practices
+### Comments
+- Explan why, not what: Comments should explain the reason behind complex logic rather than repeating what the code already says.
+- Keep comments concise: Avoid long explanations when a short comment is enough.
+- Keep comments updated: Outdated comments can be more confusing than having no comment.
+- Use comments for complex logic: Explain unusual algorithms, business rules, or workarounds.
+- Avoid unnecessary comments: Well-named variables and functions can often make comments unnecessary.
+- Use consistent formatting: Follow the commenting style used by the project or language.
+
+### Documentation
+- Use clear and simple language: Documentation should be easy for other developers to understand.
+- Explain how to use the code: Include setup instructions, requirements, examples, and expected behaviour.
+- Document public methods and classes: Explain their purpose, parameters, return values, and possible errors.
+- Keep documentation organised: Use headings, lists, and examples to make information easy to find.
+- Keep it up to date: Update documentation whenever the code or its behaviour changes.
+- Include examples when useful: Examples can make complex functionality much easier to understand.
+
+## Examples
+
+Bad comments
+```
+// Check if customer type is Premium
+if (customerType == "Premium")
+{
+    total = total * 0.9;
+}
+```
+
+Good comments
+```
+// Premium customers receive a 10% discount according to the pricing policy.
+if (customerType == "Premium")
+{
+    total *= 0.9;
+}
+```
+
+## Reflection
+    Add comments when the reason behind the code is not obvious, use comments to explain complex logic, business rules, algorithms, or workarounds. Add comments when another developer may need extra context to understand why something was implemented in a particular way.
+
+    Avoid comments when they simply describe what the code is already doing. If a variable or function has a confusing name, rename it instead of explaininig it with a comment. If a function is too long or complicated, break it into smaller functions. If the code is difficult to understand because of duplication or poor structure, refactor the code rather than adding more comments. Avoid comments that can become outdated when the code changes.
+
+#
