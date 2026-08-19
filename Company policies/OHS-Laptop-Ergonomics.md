@@ -18,3 +18,7 @@ I have been using Focus Bear while working, which remindes me to take a break ev
 
 ## Workplace and Habit Change
 I have adjusted my chair such that my feet are flat on the ground, and made sure that when I am using the keyboard and mouse, my arms are rested and elbowsw 90 degrees. I have also made an effort to get moving after every focus session witht the help of Focus Bear.
+
+## Task
+![table setup](table-setup.png)
+![Chair placement and table](chair-table.png)
