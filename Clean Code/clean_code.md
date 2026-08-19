@@ -90,3 +90,113 @@ For example, let’s say we have a website with users, and we need a variable to
     int maximumValue = 30;
     The first number and second number did not improve much, but it showed that these are the numbers we will be using to do the operations that is asked of us in the program.
     The maximumValue is what makes this more understandable, it highlights that the operations should not exceed maximumValue or a variable that is greater than maximumValue cannot exist for this program, which could be a hardware limitation.
+
+
+# Writing Functions
+## Best Practices
+- Using Descriptive Function Names that conveys its purpose, making it easy for others and yourself to understand its role within the code.
+- A single function should be focused on a single task or responsibility. This not only makes them easier to understand but also promotes modular and reusable code.
+- Strive for concise functions. Small functions are easier to comprehend and maintain. If a function becomes too lengthy, consider breaking it down into smaller, more specialized functions.
+- Avoid functions with an excessive number of parameters. This simplifies function calls and reduces the likelihood of errors.
+- Clean and consistern formatting. Use proper spacing, indentation, and line breaks to enhance readability.
+- Encapsulate complex conditions within well-named functions. Instead of cluttering your code with intricate logical checks, delegate them to separate functions with descriptive names. This enhances clarity and promotges code reuse.
+- Avoid using boolean flags as function parameters. If a function's behavior significantly differs based on a boolean parameter, consider splitting it into two separate functions. This improves readability and reduces potential confusion.
+
+## Example of a Long, Complex Function
+```
+public void ProcessOrder(double price, int quantity, string customerType)
+{
+    if (price <= 0 || quantity <= 0)
+    {
+        Console.WriteLine("Invalid order.");
+        return;
+    }
+
+    double subtotal = price * quantity;
+
+    if (customerType == "VIP")
+    {
+        subtotal = subtotal * 0.90;
+    }
+    else if (customerType == "Student")
+    {
+        subtotal = subtotal * 0.95;
+    }
+
+    double tax = subtotal * 0.10;
+    double total = subtotal + tax;
+
+    Console.WriteLine("Order processed.");
+    Console.WriteLine("Subtotal: $" + subtotal);
+    Console.WriteLine("Tax: $" + tax);
+    Console.WriteLine("Total: $" + total);
+}
+```
+Why this function is difficulat ot maintain:
+The function has too many responsibilities. It validates the order, calculates the subtotal, applies discounts, calculates tax, and displays the result. If one part needs to be changed, the developer has to work inside the same large function.
+
+This makes the function less readable and harder to test. For example, testing the discount calculation requires going through the entire ProcessOrder function.
+
+## Refactored Version
+The function can be divided into smaller functions, with each function having one clear responsibility.
+```
+public void ProcessOrder(double price, int quantity, string customerType)
+{
+    if (!IsValidOrder(price, quantity))
+    {
+        Console.WriteLine("Invalid order.");
+        return;
+    }
+
+    double subtotal = CalculateSubtotal(price, quantity);
+    subtotal = ApplyDiscount(subtotal, customerType);
+
+    double tax = CalculateTax(subtotal);
+    double total = subtotal + tax;
+
+    DisplayOrderSummary(subtotal, tax, total);
+}
+
+private bool IsValidOrder(double price, int quantity)
+{
+    return price > 0 && quantity > 0;
+}
+
+private double CalculateSubtotal(double price, int quantity)
+{
+    return price * quantity;
+}
+
+private double ApplyDiscount(double subtotal, string customerType)
+{
+    if (customerType == "VIP")
+    {
+        return subtotal * 0.90;
+    }
+
+    if (customerType == "Student")
+    {
+        return subtotal * 0.95;
+    }
+
+    return subtotal;
+}
+
+private double CalculateTax(double subtotal)
+{
+    return subtotal * 0.10;
+}
+
+private void DisplayOrderSummary(double subtotal, double tax, double total)
+{
+    Console.WriteLine("Order processed.");
+    Console.WriteLine("Subtotal: $" + subtotal);
+    Console.WriteLine("Tax: $" + tax);
+    Console.WriteLine("Total: $" + total);
+}
+```
+
+## Reflection
+    Breaking down functions is beneficial because each function can focus on one specific responsibility. This makes the code easier to read, understand, test, debug, and modify. Smaller functions can also be reused in other part of the program.
+
+    Refactoring improved the structure by separating the different tasks into individual functions. Instead of having one large function responsible for validation, calculations, discounts, tax, and displaying results, each task now has its own function. The main ProcessOrder() function is therefore shorter and easier to understand, while the supporting functions make the code more organised and maintainable.
