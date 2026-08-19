@@ -359,45 +359,28 @@ if (customerType == "Premium")
     Avoid comments when they simply describe what the code is already doing. If a variable or function has a confusing name, rename it instead of explaininig it with a comment. If a function is too long or complicated, break it into smaller functions. If the code is difficult to understand because of duplication or poor structure, refactor the code rather than adding more comments. Avoid comments that can become outdated when the code changes.
 
 # Handling Errors and Edge Cases
-## Example
-```
-public double CalculateTotal(double price, int quantity)
-{
-    double total = price * quantity;
+## Examples
+From one of my projects I have done, 
+**https://github.com/samip-pudasaini/CarRental/blob/main/app/src/main/java/com/example/carrental/RentActivity.kt**
+I found the getCarFromIntent() in my RentActivity.kt file in my Car Rental Android project.
+The function retrieves the Car object that was passed to RentActivity through an Android Intent. The original function used the !! operator, which could cause the application to crash if the CAR_DATA value was missing from the I
+![Original Code](<Screenshot 2026-08-19 210959.png>)
 
-    return total;
-}
-```
-- Problems: allows a negative price, zero or negative quantity, does not clearly handle invalid input and Invalid values could produce incorrect results.
+![Refactored Code](<Screenshot 2026-08-19 211840.png>)
+Edge Cases Handled
 
-**Refactored function - using Guard Clauses**
-```
-public double CalculateTotal(double price, int quantity)
-{
-    if (price < 0)
-    {
-        throw new ArgumentOutOfRangeException(nameof(price), "Price cannot be negative.");
-    }
+The refactored function handles the following edge case:
 
-    if (quantity <= 0)
-    {
-        throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be greater than zero.");
-    }
+The CAR_DATA value is missing from the Intent.
+A null Car object is no longer passed through the !! operator.
+Instead of causing an unexpected NullPointerException, the function throws an IllegalArgumentException with a clear message explaining the problem.
+The function still supports both newer Android versions using TIRAMISU and older Android versions.
 
-    return price * quantity;
-}
-```
-The guard clauses check invalid inputs immediately and stop the function before incorrect calculations are performed. This makes the function easier to read and ensures that invalid data is handled consistently.
 
 ## Reflections
-### What was the issue with the original code?
-    The original CalculateTotal function did not poperly handle invalid inputs. It accepted negative prices and zero or negative quantities, which could result in incorrect calculations. There was also no validation to tell the user or developer that the input was invalid.
-    I refactored the function by adding guard clauses that validate the price and quantity before performing the calculation. If a invalid value is provided, the function trows an appropriate exception with a clear error message.
-
-### How does handling errors improve reliability?
-    Handling errors improves reliability because the program can detect invalid inputs before they cause incorrect results or unexpected behaviour. Guard clauses make the validation clear and keep invalid data from being processed.
-
-    This makes the code safer, easier to maintain, and easier to debug. It also ensures that errors are handled consistently instead of allowing invalid values to continue through the application.
+The original function was risky because it assumed that the required Car object would always be available. Using !! can make an application crash when that assumption is incorrect.
+The refactored version makes the error handling more explicit by checking for null before returning the object. This makes the function safer and makes the cause of the problem easier to understand.
+This refactoring also improves maintainability because another developer can immediately see that CAR_DATA is required for RentActivity to work correctly.
 
 # Refactoring Code for Simplicity
 ## common techniques
@@ -450,3 +433,138 @@ function getStatus(user)
     I refactored the function by using a guard clause to immediately return "inactive" when the user is under 18. This removes the unnecessary nesting and makes the main logic easier to understand. The subscription check is then handled with a simple conditional expression.
 
     The refactored code is shorter, clearer, and easier to maintain while producing the same result as the original code. This shows that refactoring does not always mean changing what the code does; it can also mean improving the structure and readability of existing logic.
+
+# Identifying and Fixing Code Smells
+Code with code smells
+```
+public class StoreManager
+{
+    public void ProcessOrder(string n, double p, int q, string ct)
+    {
+        double x = p * q;
+
+        if (ct == "Premium")
+        {
+            x = x * 0.9;
+        }
+
+        if (x > 100)
+        {
+            Console.WriteLine("Free shipping");
+        }
+        else
+        {
+            Console.WriteLine("Shipping: $10");
+        }
+
+        // if (q > 10)
+        // {
+        //     x = x * 0.95;
+        // }
+
+        Console.WriteLine("Customer: " + n);
+        Console.WriteLine("Total: $" + x);
+
+        // SaveOrder();
+        // SendEmail();
+    }
+
+    public void ProcessOnlineOrder(string customerName, double price, int quantity)
+    {
+        double total = price * quantity;
+
+        if (total > 100)
+        {
+            Console.WriteLine("Free shipping");
+        }
+        else
+        {
+            Console.WriteLine("Shipping: $10");
+        }
+
+        Console.WriteLine("Customer: " + customerName);
+        Console.WriteLine("Total: $" + total);
+    }
+
+    public void ManageCustomer()
+    {
+        Console.WriteLine("Adding customer...");
+        Console.WriteLine("Updating customer...");
+        Console.WriteLine("Deleting customer...");
+        Console.WriteLine("Sending customer email...");
+        Console.WriteLine("Generating customer report...");
+        Console.WriteLine("Saving customer data...");
+    }
+}
+```
+
+| Code smell                     | Example                                                                            |
+| ------------------------------ | ---------------------------------------------------------------------------------- |
+| **Magic Numbers & Strings**    | `0.9`, `100`, `10`, `"Premium"`                                                    |
+| **Long Functions**             | `ProcessOrder()` performs calculation, discounting, shipping and displaying        |
+| **Duplicate Code**             | `ProcessOrder()` and `ProcessOnlineOrder()` contain similar shipping/display logic |
+| **Large Class / God Object**   | `StoreManager` handles orders, customers, emails and reports                       |
+| **Deeply Nested Conditionals** | Multiple conditions can become difficult to follow as the function grows           |
+| **Commented-Out Code**         | `// SaveOrder()`, `// SendEmail()` and the quantity discount                       |
+| **Inconsistent Naming**        | `n`, `p`, `q`, `ct`, and `x` do not clearly describe their purpose                 |
+
+
+**Refactored version**
+```
+public class OrderService
+{
+    private const double PremiumDiscount = 0.10;
+    private const double FreeShippingLimit = 100.00;
+    private const double ShippingCost = 10.00;
+    private const string PremiumCustomer = "Premium";
+
+    public void ProcessOrder(
+        string customerName,
+        double price,
+        int quantity,
+        string customerType)
+    {
+        double subtotal = CalculateSubtotal(price, quantity);
+        double total = ApplyDiscount(subtotal, customerType);
+
+        DisplayOrder(customerName, total);
+    }
+
+    private double CalculateSubtotal(double price, int quantity)
+    {
+        return price * quantity;
+    }
+
+    private double ApplyDiscount(double amount, string customerType)
+    {
+        if (customerType == PremiumCustomer)
+        {
+            return amount * (1 - PremiumDiscount);
+        }
+
+        return amount;
+    }
+
+    private void DisplayOrder(string customerName, double total)
+    {
+        Console.WriteLine("Customer: " + customerName);
+        Console.WriteLine("Total: $" + total);
+
+        DisplayShippingCost(total);
+    }
+
+    private void DisplayShippingCost(double total)
+    {
+        if (total >= FreeShippingLimit)
+        {
+            Console.WriteLine("Free shipping");
+            return;
+        }
+
+        Console.WriteLine($"Shipping: ${ShippingCost}");
+    }
+}
+```
+
+## Reflection
+### What code smells did you find in your code?
