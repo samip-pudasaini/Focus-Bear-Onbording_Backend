@@ -200,3 +200,116 @@ private void DisplayOrderSummary(double subtotal, double tax, double total)
     Breaking down functions is beneficial because each function can focus on one specific responsibility. This makes the code easier to read, understand, test, debug, and modify. Smaller functions can also be reused in other part of the program.
 
     Refactoring improved the structure by separating the different tasks into individual functions. Instead of having one large function responsible for validation, calculations, discounts, tax, and displaying results, each task now has its own function. The main ProcessOrder() function is therefore shorter and easier to understand, while the supporting functions make the code more organised and maintainable.
+
+## Don't Repeat Yourself (DRY)
+DRY is a software development principle that avoids duplication of logic by promoting reusable components and code. It ensures changes are made in one place, improving maintainability and consistency. DRY works with modular design and SRP to build scalable and efficient systems.
+
+- Promotes code reuse by reducing duplication and ensuring consistency across the codebase
+- Centralizes logic to minimize errors, simplify updates, and support SRP for better system design.
+
+**Before Refactoring**
+```
+public void ProcessOrder(double price, int quantity, string customerType)
+{
+    if (price <= 0 || quantity <= 0)
+    {
+        Console.WriteLine("Invalid order.");
+        return;
+    }
+
+    double subtotal = price * quantity;
+
+    if (customerType == "Premium")
+    {
+        subtotal *= 0.9;
+    }
+
+    double tax = subtotal * 0.1;
+    double total = subtotal + tax;
+
+    Console.WriteLine($"Total: {total}");
+}
+
+public void ProcessSpecialOrder(double price, int quantity, string customerType)
+{
+    if (price <= 0 || quantity <= 0)
+    {
+        Console.WriteLine("Invalid order.");
+        return;
+    }
+
+    double subtotal = price * quantity;
+
+    if (customerType == "Premium")
+    {
+        subtotal *= 0.9;
+    }
+
+    double tax = subtotal * 0.1;
+    double total = subtotal + tax;
+
+    Console.WriteLine($"Total: {total}");
+}
+```
+
+**After Refactoring**
+```
+public void ProcessOrder(double price, int quantity, string customerType)
+{
+    if (!IsValidOrder(price, quantity))
+    {
+        Console.WriteLine("Invalid order.");
+        return;
+    }
+
+    double subtotal = CalculateSubtotal(price, quantity);
+    subtotal = ApplyDiscount(subtotal, customerType);
+
+    double tax = CalculateTax(subtotal);
+    double total = subtotal + tax;
+
+    DisplayTotal(total);
+}
+
+public void ProcessSpecialOrder(double price, int quantity, string customerType)
+{
+    ProcessOrder(price, quantity, customerType);
+}
+
+private bool IsValidOrder(double price, int quantity)
+{
+    return price > 0 && quantity > 0;
+}
+
+private double CalculateSubtotal(double price, int quantity)
+{
+    return price * quantity;
+}
+
+private double ApplyDiscount(double subtotal, string customerType)
+{
+    if (customerType == "Premium")
+    {
+        return subtotal * 0.9;
+    }
+
+    return subtotal;
+}
+
+private double CalculateTax(double subtotal)
+{
+    return subtotal * 0.1;
+}
+
+private void DisplayTotal(double total)
+{
+    Console.WriteLine($"Total: {total}");
+}
+```
+
+## Reflection
+### What were the issues with duplicated code?
+    The duplicated code made the program longer and harder to maintain. The same validation, calculation, discount, and tax logic appeared multiple places. If I needed to change the calculation, I would have to update it in every location, which could lead to mistakes or inconsistent results.
+
+### How did refactoring improve maintainability?
+    Refactoring removed the repeated code by placing common logic into separate reusable methods. This makes the code shorter, easier to read, and easier to update. Now, if a calculation or rule needs to change, I only need to modify it in one place. This reduces errors and makes the program easier to maintain in the future.
