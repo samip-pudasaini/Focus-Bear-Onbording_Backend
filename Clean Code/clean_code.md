@@ -358,4 +358,45 @@ if (customerType == "Premium")
 
     Avoid comments when they simply describe what the code is already doing. If a variable or function has a confusing name, rename it instead of explaininig it with a comment. If a function is too long or complicated, break it into smaller functions. If the code is difficult to understand because of duplication or poor structure, refactor the code rather than adding more comments. Avoid comments that can become outdated when the code changes.
 
+# Handling Errors and Edge Cases
+## Example
+```
+public double CalculateTotal(double price, int quantity)
+{
+    double total = price * quantity;
+
+    return total;
+}
+```
+- Problems: allows a negative price, zero or negative quantity, does not clearly handle invalid input and Invalid values could produce incorrect results.
+
+**Refactored function - using Guard Clauses**
+```
+public double CalculateTotal(double price, int quantity)
+{
+    if (price < 0)
+    {
+        throw new ArgumentOutOfRangeException(nameof(price), "Price cannot be negative.");
+    }
+
+    if (quantity <= 0)
+    {
+        throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be greater than zero.");
+    }
+
+    return price * quantity;
+}
+```
+The guard clauses check invalid inputs immediately and stop the function before incorrect calculations are performed. This makes the function easier to read and ensures that invalid data is handled consistently.
+
+## Reflections
+### What was the issue with the original code?
+    The original CalculateTotal function did not poperly handle invalid inputs. It accepted negative prices and zero or negative quantities, which could result in incorrect calculations. There was also no validation to tell the user or developer that the input was invalid.
+    I refactored the function by adding guard clauses that validate the price and quantity before performing the calculation. If a invalid value is provided, the function trows an appropriate exception with a clear error message.
+
+### How does handling errors improve reliability?
+    Handling errors improves reliability because the program can detect invalid inputs before they cause incorrect results or unexpected behaviour. Guard clauses make the validation clear and keep invalid data from being processed.
+
+    This makes the code safer, easier to maintain, and easier to debug. It also ensures that errors are handled consistently instead of allowing invalid values to continue through the application.
+
 #
