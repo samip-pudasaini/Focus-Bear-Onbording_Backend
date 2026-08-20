@@ -2,7 +2,7 @@
 
 ## Research & Learn 
 
-- Only using a laptop without any monitor or keyboard can cause posture issues and strain, resulting in neck pain, backaches, eye starin and discomfort.
+- Only using a laptop without any monitor or keyboard can cause posture issues and strain, resulting in neck pain, backaches, eye strain and discomfort.
 
 - The essentials are: Laptop Stands & Risers, External Keyboards & Mice, Ergonomic Chairs, Forearm & Wrist Supports and External Monitors.
 
