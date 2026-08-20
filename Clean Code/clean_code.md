@@ -365,16 +365,47 @@ From one of my projects I have done,
 I found the getCarFromIntent() in my RentActivity.kt file in my Car Rental Android project.
 The function retrieves the Car object that was passed to RentActivity through an Android Intent. The original function used the !! operator, which could cause the application to crash if the CAR_DATA value was missing from the I
 ![Original Code](<Screenshot 2026-08-19 210959.png>)
+```kotlin
+    /**
+     * Get Car object from Intent (handles different Android versions)
+     */
+    private fun getCarFromIntent(): Car {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra("CAR_DATA", Car::class.java)!!
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra("CAR_DATA")!!
+        }
+    }
+```
+
 
 ![Refactored Code](<Screenshot 2026-08-19 211840.png>)
+```kotlin
+    /**
+     * Get Car object from Intent (handles different Android versions)
+     */
+    private fun getCarFromIntent(): Car {
+        var car = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra("CAR_DATA", Car::class.java)!!
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra("CAR_DATA")!!
+        }
+
+        return car?: throw IllegalArgumentException(
+            "Car data is required to open the rental screen"    
+        )
+    }
+```
 Edge Cases Handled
 
 The refactored function handles the following edge case:
 
-The CAR_DATA value is missing from the Intent.
-A null Car object is no longer passed through the !! operator.
-Instead of causing an unexpected NullPointerException, the function throws an IllegalArgumentException with a clear message explaining the problem.
-The function still supports both newer Android versions using TIRAMISU and older Android versions.
+- The CAR_DATA value is missing from the Intent.
+- A null Car object is no longer passed through the !! operator.
+- Instead of causing an unexpected NullPointerException, the function throws an IllegalArgumentException with a clear message explaining the problem.
+- The function still supports both newer Android versions using TIRAMISU and older Android versions.
 
 
 ## Reflections
