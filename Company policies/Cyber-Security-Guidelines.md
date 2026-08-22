@@ -22,3 +22,12 @@ If I suspect a security breach, I will secure the affected account, change or re
 
 ## Task
 I will always lock my computer when stepping away and verify suspicious links or messages before interacting with them. I will also enable 2FA on work accounts wherever possible.
+I am also using 2FA authentication using authenticator, whose proof cannot be given as the apps donot support screenshot due to privacy.
+
+Proofs: used google password manager for easy cross-device compatibality
+![password manager](<Screenshot 2026-08-23 020742.png>)
+
+This was my one new cyber security habit, making sure my device is locked everytime I walk away, for my phone, I have the habit of locking it after everyuse, it's a habit that is because of years of repetition.
+For my computer, I have added dynamic lock, linked to my mobile, so it is locked as soon as I walk away.
+Added dynamic lock
+![Computer Protection](<Screenshot 2026-08-23 021647.png>)
