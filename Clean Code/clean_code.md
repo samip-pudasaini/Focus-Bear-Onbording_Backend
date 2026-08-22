@@ -398,20 +398,36 @@ The function retrieves the Car object that was passed to RentActivity through an
         )
     }
 ```
-Edge Cases Handled
+
+## Edge Cases Handled
 
 The refactored function handles the following edge case:
 
-- The CAR_DATA value is missing from the Intent.
-- A null Car object is no longer passed through the !! operator.
-- Instead of causing an unexpected NullPointerException, the function throws an IllegalArgumentException with a clear message explaining the problem.
-- The function still supports both newer Android versions using TIRAMISU and older Android versions.
+* The `CAR_DATA` value is missing from the Intent.
+* The `getParcelableExtra()` result is allowed to be `null` instead of using the `!!` operator.
+* The function explicitly checks whether the returned `Car` object is `null`.
+* If the value is missing, an `IllegalArgumentException` is thrown with a clear message explaining the problem.
+* The function continues to support both newer Android versions using `TIRAMISU` and older Android versions.
+* The application therefore avoids an unexpected `NullPointerException` caused by the `!!` operator.
 
 
-## Reflections
-The original function was risky because it assumed that the required Car object would always be available. Using !! can make an application crash when that assumption is incorrect.
-The refactored version makes the error handling more explicit by checking for null before returning the object. This makes the function safer and makes the cause of the problem easier to understand.
-This refactoring also improves maintainability because another developer can immediately see that CAR_DATA is required for RentActivity to work correctly.
+## Reflection
+
+### What problem did you identify?
+
+The original function was risky because it assumed that the required `Car` object would always be available in the Intent. The `!!` operator forced Kotlin to treat the returned value as non-null. If `CAR_DATA` was missing, the application could crash with a `NullPointerException`.
+
+This was an edge case that the original code did not handle safely because it relied on the assumption that the Intent would always contain the required data.
+
+### How did the refactoring improve the code?
+
+The refactored version removes both `!!` operators and allows `getParcelableExtra()` to return a nullable `Car`. The result is stored in the nullable `car` variable and then checked using the Elvis operator (`?:`).
+
+If `car` is not null, it is returned normally. If it is null, the function throws an `IllegalArgumentException` with the message `"Car data is required to open the rental screen"`.
+
+This makes the error handling explicit and prevents the null value from causing an unexpected `NullPointerException`.
+
+
 
 # Refactoring Code for Simplicity
 ## common techniques
