@@ -67,7 +67,10 @@ public class StoreManager
 | **Inconsistent Naming**        | `n`, `p`, `q`, `ct`, and `x` do not clearly describe their purpose                 |
 
 
-**Refactored version**
+# Identifying and Fixing Code Smells
+
+## Corrected Refactored Version
+
 ```csharp
 public class OrderService
 {
@@ -78,7 +81,7 @@ public class OrderService
     private const string InPersonPlatform = "In-Person";
 
     public void ProcessOrder(string customerName, double price, int quantity,
-                            string customerType, string platform)
+                             string customerType, string platform)
     {
         double subtotal = CalculateSubtotal(price, quantity);
         double total = ApplyDiscount(subtotal, customerType);
@@ -111,29 +114,47 @@ public class OrderService
 
     private void DisplayShippingCost(double total, string platform)
     {
-        if(Platform == InPersonPlatform)
+        if (platform == InPersonPlatform)
         {
-             Console.WriteLine("Free shipping");
-             return;
-        } 
-        
+            Console.WriteLine("Free shipping");
+            return;
+        }
+
         if (total >= FreeShippingLimit)
         {
             Console.WriteLine("Free shipping");
             return;
         }
+
         Console.WriteLine($"Shipping: ${ShippingCost}");
     }
 }
 ```
 
-## Reflection
-### What code smells did you find in your code?
-The refactor worked on multiple aspects of the codebase. Firstly the hardcoded values were changed, with variables having the value. Like for applying discount, instead of directly hardocding in the required space, a variable is used, if the Discount percentage is changed at a later date, we do not need to refactor at everyplace.
-The Long Function `ProcessOrder()` was handling multiple tasks which has now been distributed to multiple functions handling their respective tasks.
-The code were not commented out, checked if anything important remained commented out.
-The variables have been named as their function and the purpose they carry.
-There was duplicated code with two function, one for inperson and one for online purchase. In the refactored code, the functions have been removed and inplace if the platform being used is detected to be in person, the shipping fee is not included.
+The `Platform` bug was fixed by changing it to `platform`, which matches the parameter name in `DisplayShippingCost()`. This allows the code to compile correctly.
 
-Avoiding code smells make future debugging easier by making the code cleaner, easier to understand, find and concise. As we could see, the refactored code is modular, more concise while being discriptive as what the function are meant to do and what the variables are for.
-When functions are smaller and responsibilities are separated, developers can identify where a problem occurs without having to search through a large amount of unrealted code. Removing duplicated code also means a bug usually only needs to be fixed in one place instead of multiple places. Using meaningful names and constants makes it easier to understand what values and variables represent. Overall, clean code reduces the time needed to find, understand, and fix errors.
+## Reflection
+
+### What code smells did you find in your code?
+
+I identified several code smells in the original code. The first was **magic numbers and strings**, such as `0.9`, `100`, `10`, and `"Premium"`. These values were replaced with named constants such as `PremiumDiscount`, `FreeShippingLimit`, `ShippingCost`, and `PremiumCustomer`. This makes the purpose of each value clearer and means that if a business rule changes, the value can be updated in one place instead of searching through the code for every occurrence.
+
+Another issue was the **long function**. The original `ProcessOrder()` method was responsible for calculating the order subtotal, applying discounts, handling shipping, and displaying the order information. These responsibilities were separated into smaller methods: `CalculateSubtotal()`, `ApplyDiscount()`, `DisplayOrder()`, and `DisplayShippingCost()`. Each method now has a more focused responsibility.
+
+I also identified **duplicated code** between `ProcessOrder()` and `ProcessOnlineOrder()`. Both methods calculated totals and displayed customer and order information. The refactored version combines this functionality into a single `ProcessOrder()` method and uses the `platform` parameter to determine the appropriate shipping behaviour.
+
+The original class also showed signs of a **large class or God Object** because `StoreManager` was responsible for orders, customers, emails, and reports. The refactoring changed the class name to `OrderService` so that it focuses specifically on order-related responsibilities.
+
+I also removed the **commented-out code**, such as `// SaveOrder()`, `// SendEmail()`, and the unused quantity discount. Keeping unused code in comments can make the code harder to understand and can leave developers unsure whether it is still required.
+
+Finally, I improved the **inconsistent naming**. Names such as `n`, `p`, `q`, `ct`, and `x` did not clearly explain what the variables represented. They were replaced with descriptive names such as `customerName`, `price`, `quantity`, `customerType`, `subtotal`, and `total`.
+
+### Readability and Maintainability
+
+The refactored code improves **readability** because the names of methods, variables, and constants clearly describe their purpose. For example, `CalculateSubtotal()` immediately indicates what the method does, while `FreeShippingLimit` clearly communicates what the value `100.00` represents. Breaking the large `ProcessOrder()` method into smaller methods also makes the overall code easier to read because each method has a single, focused responsibility.
+
+The refactoring also improves **maintainability** because changes can be made in a more controlled way. For example, if the free shipping threshold changes from `$100` to `$150`, the `FreeShippingLimit` constant can be updated without searching through multiple methods. Similarly, shipping logic is contained in `DisplayShippingCost()`, so changes to shipping rules can be made in one location.
+
+Removing duplicated code also makes maintenance easier. If the order display or shipping logic needs to be changed, developers only need to update the relevant method rather than making the same change in multiple places. This reduces the chance of introducing inconsistent behaviour or bugs.
+
+Overall, the refactored code is more modular, readable, and maintainable. Smaller methods make it easier to locate and debug problems, meaningful names make the code easier to understand, and removing duplication and magic values makes future changes safer and more efficient.
