@@ -2,32 +2,26 @@
 
 ## Weekly Schedule
 
-| Day       | Time   | Location   |         Hours |
-| --------- | ------ | ---------- | ------------: |
-| Monday    | 12-5 pm| Remote     |             5 |
-| Tuesday   | 10-6   | hybrid     |             7 |
-| Wednesday | 10-6   | Remote     |             7 |
-| **Total** |        |            | **18 hours**  |
+| **Week commencing**        | **Planned internship days/hours** | **Weekly total Hours** |
+| -------------------------- | --------------------------------- | ---------------------: |
+| **10 Aug (Wk 1)**          | Tue 4h, Wed 4.54h, Sun 2h         |                  10.54 |
+| **17 Aug (Wk 2)**          | Tue 5.25h, Wed 5.5h, Thu 2.27h    |                  13.02 |
+| **24 Aug (Wk 3)**          | Mon 5h, Tue 5h, Thu 2h            |                     12 |
+| **31 Aug (Wk 4)**          | Mon 5h, Tue 5h, Fri 2h            |                     12 |
+| **7 Sep (Wk 5)**           | Tue 5h, Wed 5h, Fri 2h            |                     12 |
+| **MID SEM BREAK**          | —                                 |                      — |
+| **21 Sep (Wk 7)**          | Tue 5h, Wed 5h, Fri 2h            |                     12 |
+| **28 Sep (Wk 8)**          | Tue 5h, Wed 5h, Fri 2h            |                     12 |
+| **5 Oct (Wk 9)**           | Tue 5h, Wed 5h, Fri 2h            |                     12 |
+| **12 Oct (Wk 10)**         | Tue 5h, Wed 5h, Fri 2h            |                     12 |
+| **19 Oct (Wk 11)**         | Tue 5h, Wed 5h, Fri 2h            |                     12 |
+| **26 Oct (Wk 12)**         | Tue 5h, Wed 5h, Fri 2h            |                     12 |
+| **Total Internship Hours** |                                   |             **131.56** |
+
 
 Note: Hours may exceed or not fulfilled on certain week.
 
-On thursdays and fridays, I am typically available to 3 pm but I might have some errards on some weeks. When required, I will put work on those days, to achiecve the required hours for my internship
-
-## Week-by-Week Plan
-
-During the onboarding task, I will give as much time as possible to learn these quick but with good understanding. SO the exact schedule will vary
-
-### Week 1-3
-
-* **Days:** Daily
-* **Time:** Variable
-* **Location:** [Location]
-* **Planned hours:** 18
-* **Focus:** Onboarding tasks
-
-### Following Weeks
-
-I will continue following my scheduled working hours and adjust my tasks according to project requirements and supervisor feedback.
+On thursdays and fridays, I am typically available to 3 pm but I might have some errards on some weeks. When required, I will put work on those days, to achiecve the required hours for my internship.
 
 ## Time Tracking
 
