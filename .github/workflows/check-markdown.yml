@@ -1,0 +1,53 @@
+name: Markdown Checks
+
+on:
+  pull_request:
+    paths:
+      - "**.md"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  markdown-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install tools
+        run: npm install -g markdownlint-cli2 cspell
+
+      - name: Lint Markdown (Manual Annotations)
+        if: always()
+        run: |
+          # Use JSON output formatting so we can easily parse the syntax errors
+          markdownlint-cli2 "**/*.md" --json 2> markdown_errors.json || true
+          
+          # Parse JSON output and convert to GitHub native error annotations
+          jq -r '.[] | "::error file=\(.fileName),line=\(.lineNumber),col=\(.errorRange[0])::\(.ruleNames[0]): \(.ruleDescription)"' markdown_errors.json
+          
+          # Force the step to fail if errors were caught
+          if [ -s markdown_errors.json ] && [ "$(cat markdown_errors.json)" != "[]" ]; then
+            echo "Markdown linting failed." && exit 1
+          fi
+
+      - name: Spell check Markdown (Manual Annotations)
+        if: always()
+        run: |
+          # Output cspell results to a plain text file using a clean format
+          cspell "**/*.md" --no-must-find-files --config .cspell.json --words-only --unique --color=false > cspell_errors.txt || true
+          
+          # Read lines and convert standard cspell console text to GitHub error format
+          # cspell output matches: path/to/file.md:line:col - Unknown word (word)
+          if [ -s cspell_errors.txt ]; then
+            awk -F ':' '{print "::error file=" $1 ",line=" $2 ",col=" $3 "::Spelling Error: " $4}' cspell_errors.txt
+            echo "Spelling validation failed." && exit 1
+          fi
