@@ -1,13 +1,52 @@
 # Git Understanding
 
+# Merge Conflicts & Conflict Resolution
+
+## testing
+
+### outcome
+
+```
+<<<<<< New-Branch
+This line was changed on new branch
+=======
+This line is changed in main branch
+>>>>>>> main
+```
+
+## What caused the conflict?
+
+Both `main` and `New-branch` modified the same line in README.md after diverging
+from a shared commit. Git can auto-merge non-overlapping changes, but when both
+branches touch the same lines, it can't tell which version is correct, so it
+flags a conflict and pauses the merge for a human decision.
+
+## How did I resolve it?
+
+Opened the pull request on GitHub and used "Resolve conflicts" to open the
+inline editor. Reviewed the two conflicting versions shown between the <<<<<<<
+main and >>>>>>> new-branch markers, decided to [keep main's version / keep
+new-branch's version / combine both], removed the conflict markers, marked
+the file as resolved, and committed the merge directly from the PR.
+
+## What did I learn?
+
+- Conflicts happen at the line level, not the whole file — Git merges everything
+  else automatically.
+- GitHub's web conflict editor lets you resolve simple conflicts without needing
+  the command line, as long as the conflict isn't too complex.
+- The markers `<<<<<<<`, `=======`, `>>>>>>>` represent "your branch's version"
+  vs. "the incoming branch's version" — understanding that structure makes
+  resolving conflicts much less intimidating.
+
 # Pull Request
 
 ## Why are PRs important in a team workflow?
 
-Pull requests are important because they allow developers to review changes before
-they are merged into the main branch. Instead of directly changing the main
-codebase, developers can work on separate branches and then submit their work for
-review.
+Pull requests are important because they allow developers to review changes
+before they are merged into the main branch. Instead of directly changing the
+main codebase, developers can work on separate branches and then submit their
+work for review.
 
 ## What makes a well-structured PR?
 
@@ -30,21 +69,19 @@ possible while still being short, Be specific
 
 Make the messages short, most messages are viewed in someone's terminal, or in
 the history on a PR in github, and only the first line is shown by default,
-longer messages are hidden.
-Make the messages as descriptive as possible while keeping it short. This can be
-done by being specific.
+longer messages are hidden. Make the messages as descriptive as possible while
+keeping it short. This can be done by being specific.
 
-examples: 6904a37  adds test for rate limit backoff behavior (4 hours ago)
-<justin>
-This is good, but the better one would be
-6904a37  test summary_client rate limit backoff behavior (4 hours ago) <justin>
+examples: 6904a37 adds test for rate limit backoff behavior (4 hours ago)
+<justin> This is good, but the better one would be 6904a37 test summary_client
+rate limit backoff behavior (4 hours ago) <justin>
 
 This points out what test is added and for which file.
 
 ## How does a clear commit message help in team collaboration?
 
-As the example given above:
-6904a37  test summary_client rate limit backoff behavior (4 hours ago) <justin>
+As the example given above: 6904a37 test summary_client rate limit backoff
+behavior (4 hours ago) <justin>
 
 This helps make it easier to understand what changes were made in the current
 commit.
@@ -63,18 +100,19 @@ code reviews, and merging branches harder.
 
 git bisect is a debugging tool that uses binary search to find the exact commit
 that introduced a bug or regression into your codebase. By splitting the commit
-history in half at each step, it efficiently narrows down the problematic commit.
+history in half at each step, it efficiently narrows down the problematic
+commit.
 
-You would use git bisect in a real-world debugging situation when a bug exists in
-the current version of a project, but you do not know which recent commit
-introduced it. For example, if an application was working last week but is broken
-today, git bisect can pinpoint which commit caused the issue.
+You would use git bisect in a real-world debugging situation when a bug exists
+in the current version of a project, but you do not know which recent commit
+introduced it. For example, if an application was working last week but is
+broken today, git bisect can pinpoint which commit caused the issue.
 
 git bisect is much faster and more efficient than manually reviewing commits,
-especially when a project has many commits. Instead of checking each commit one by
-one, git bisect uses a binary search approach to identify the problematic commit
-with only a few tests. How ever, manual review can still provide context that
-automated tools cannot.
+especially when a project has many commits. Instead of checking each commit one
+by one, git bisect uses a binary search approach to identify the problematic
+commit with only a few tests. How ever, manual review can still provide context
+that automated tools cannot.
 
 # Git Commands and when to use them
 
@@ -100,24 +138,24 @@ one branch and successfully applied it to another.
 git log
 ```
 
-git log displays the commit history of a repository. It shows information such as
-commit IDs, authors, dates, and commit messages. I used it to view the changes I
-had made over time.
+git log displays the commit history of a repository. It shows information such
+as commit IDs, authors, dates, and commit messages. I used it to view the
+changes I had made over time.
 
 ```
 git blame <file>
 ```
 
-git blame shows which commit and author last modified each line of a file. It can
-help trace a particular line of code back to the change that introduced or
+git blame shows which commit and author last modified each line of a file. It
+can help trace a particular line of code back to the change that introduced or
 modified it.
 
 ## When would you use these commands in a real project?
 
 I would use these commands regularly when working on a large project with
 multiple developers. git checkout main -- <file> would be useful when I
-accidentally make unwanted changes to one file. git cherry-pick is useful when
-I want to apply specific commits from one branch to another without doing a full
+accidentally make unwanted changes to one file. git cherry-pick is useful when I
+want to apply specific commits from one branch to another without doing a full
 merge.
 
 ## What surprised you while testing these commands?
@@ -132,8 +170,8 @@ useful for understanding the history of specific lines of code.
 ## Why is pushing directly to main problematic?
 
 Pushing directly to main is problematic, or untested code into the main version
-of the project. If multiple developers push changes directly to main, it can also
-become difficult to track who made what changes.
+of the project. If multiple developers push changes directly to main, it can
+also become difficult to track who made what changes.
 
 ## How do branches help with reviewing code?
 
@@ -192,8 +230,8 @@ you performed two different tasks: first one, then the other.
 ## When would you want to stage changes without committing?
 
 You would want to stage changes without committing when you want to prepare
-specific changes for the next commit but are not ready to permanently record them
-in the Git history.
+specific changes for the next commit but are not ready to permanently record
+them in the Git history.
 
 For example, you might stage your completed changes, review them with git diff
 --cached, and make sure everything is correct before committing. It can also be
