@@ -1,43 +1,106 @@
-# Setup
+# NestJS Setup
 
-## In default Setup
+## Default Project Setup
 
-File structure: **src**
+I created a new NestJS project using the NestJS CLI. The commands I used were:
 
-- app.controller.spec.ts
-- app.controller.ts
-- app.module.ts -app.service.ts
-- main.ts
+```bash
+npm i -g @nestjs/cli
+nest new nestjs-project
+cd nestjs-project
+npm run start:dev
+```
 
-## Main.ts
+The NestJS CLI installed the required project dependencies and generated the
+default project structure. The main dependencies included NestJS, Express,
+TypeScript, and the required testing packages.
 
-TO create a Nest application instance, we use the coer `NestFactory` class.
-`NestFactory` exposes a few static methods that allow you to create an
-application instance.
+The default project structure I received was:
 
-In the `main.ts`, we start up our HTTP listener, which lets the application
-await inbound HTTP requests.
+```text
+nestjs-project/
+├── src/
+│   ├── app.controller.spec.ts
+│   ├── app.controller.ts
+│   ├── app.module.ts
+│   ├── app.service.ts
+│   └── main.ts
+├── test/
+│   ├── app.e2e-spec.ts
+│   └── jest-e2e.json
+├── node_modules/
+├── .prettierrc
+├── eslint.config.mjs
+├── nest-cli.json
+├── package-lock.json
+├── package.json
+├── README.md
+├── tsconfig.build.json
+└── tsconfig.json
+```
 
-## app module
+## main.ts
 
-The use of app module in here is to connect to all the modules in the project,
-from imports, controller and providers.
+To create a NestJS application instance, we use the core `NestFactory` class.
+`NestFactory` provides static methods that allow us to create an application
+instance.
 
-It is the root module that acts as the primary entry point and orchestrator that
-NestJS uses to build your entire application graph.
+In `main.ts`, the application is created and the HTTP listener is started. This
+allows the application to receive incoming HTTP requests.
 
-## scalability
+## app.module.ts
 
-Standalone applications in NestJs allows you to create a modular, isolated
-services without a full application context. For example, you can spin up
-lightweight scripts or specialized services without introducing the overhead of
-a complete microservices setup.
+The `AppModule` is the root module of the NestJS application. It connects the
+different parts of the application through its `imports`, `controllers`, and
+`providers`.
 
-It gave us the flexibility to scale specific tasks without overcomplicating
-things.
+It acts as the primary entry point and orchestrator that NestJS uses to build
+the application's dependency graph.
 
-By choosing NestJS’s standalone capability, we:
+## Testing the Default Endpoint
 
-- Avoid unnecessary architectural overhauls.
-- Kept the system clean and maintainable.
-- Focused on solving the problem efficiently.
+I tested the default endpoint provided by NestJS by sending a GET request to:
+
+```text
+GET http://localhost:3000/
+```
+
+The response was:
+
+```text
+Hello World!
+```
+
+I also confirmed that the development server started successfully using:
+
+```bash
+npm run start:dev
+```
+
+The application was available on `localhost:3000`.
+
+## Scalability
+
+NestJS provides a modular structure that makes applications easier to scale as
+they become larger. Instead of putting all functionality into one large module,
+features can be separated into their own modules, controllers, and providers.
+
+For example, an application could have separate modules for users,
+authentication, and products. Each module can contain the controllers and
+services related to that feature while still being connected through the root
+`AppModule`.
+
+NestJS also supports standalone applications, which allow specific services or
+scripts to run without requiring a complete HTTP application. This can be useful
+for specialised tasks without introducing unnecessary architectural complexity.
+
+By using NestJS's modular and standalone capabilities, we can:
+
+- Keep different features separated and maintainable.
+- Add new modules without significantly changing existing functionality.
+- Reuse services through NestJS's dependency injection system.
+- Scale specific parts of the application when necessary.
+- Avoid unnecessary architectural changes as the project grows.
+
+Overall, NestJS's module-based structure provides a clean foundation for
+developing and scaling larger applications.
