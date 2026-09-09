@@ -9,8 +9,8 @@ more.
 ## Applying middleware
 
 ```ts
-import { Injectible, NestMiddleware } from "@nestjs/common";
-import { Request, Response, NextFuncton } from "express";
+import { Injecteble, NestMiddleware } from "@nestjs/common";
+import { Request, Response, NextFunction } from "express";
 
 @Injecteble()
 export class LoggerMiddleWare implements NestMiddleWare {
@@ -22,17 +22,20 @@ export class LoggerMiddleWare implements NestMiddleWare {
 ```
 
 ```ts
-import { Module, NestModule, MiddlewareConcumer } from "@nestjs/common";
-import { LoggerMiddleware } from "./common/middleware/logger.middleware";
+import {
+  Module,
+  NestModule,
+  MiddlewareConsumer,
+  RequestMethod,
+} from "@nestjs/common";
+import { LoggerMiddleWare } from "./common/middleware/logger.middleware";
 import { CatsModule } from "./cats/cats.module";
 
-@Module({
-  imports: [CatsModule],
-})
+@Module({ imports: [CatsModule] })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(loggerMiddleware)
+      .apply(LoggerMiddleware)
       .forRoutes({ path: "cats", method: RequestMethod.GET });
   }
 }
@@ -55,17 +58,31 @@ the interceptor, we can do any process and modify the request before it's sent
 to the server. We can also set up the interceptor to intercept the response
 before being sent back to the client.
 
-## Difference from Middleware
+## Simple Logging Interceptor
 
-Interceptors have access to response/request before and after the route handler
-is called.
+```ts
+//logging.interceptor.ts
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+} from "@nestjs/common";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 
-Middleware is called only before the route handler is called.
+@Injectable()
+export class LoggingInterceptor implements NestInterceptor {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    console.log("Before...");
 
-### when to use
-
-You would use an interceptor when you want to have access to the
-response/request at both time before and after the route handler is called.
+    const now = Date.now();
+    return next
+      .handle()
+      .pipe(tap(() => console.log(`After... ${Date.now() - now}ms`)));
+  }
+}
+```
 
 ## `ClassSerializerInterceptor`
 
@@ -180,3 +197,29 @@ onward so NestJS can handle it normally.
 
 In simple terms, Something went wrong while processing this request. Let me log
 the error before NestJS handles it.
+
+# Reflection
+
+## What is the difference between interceptor and middleware?
+
+Middleware runs before the route handler and primarily works with the request
+and response objects. An interceptor wraps around the route handler, allowing it
+to execute code both before and after the handler runs. This makes interceptors
+more suitable for processing controller responses and handling operations around
+the complete request-response cycle.
+
+## When would you use an interceptor instead of middleware?
+
+I would use an interceptor when I need to perform an operation after the
+controller has executed, such as logging response data, transforming a response,
+measuring execution time, or catching errors. Middleware would be more
+appropriate when I only need to process the request before it reaches the
+controller.
+
+## How does LoggerErrorInterceptor help?
+
+LoggerErrorInterceptor helps by catching errors that occur during request
+processing and logging useful information about them. It then passes the error
+back to NestJS so that NestJS's normal exception-handling system can generate
+the appropriate response. This makes debugging easier without replacing the
+framework's built-in error handling.
