@@ -2,42 +2,47 @@
 
 # Merge Conflicts & Conflict Resolution
 
-## testing
+## Testing
 
-### outcome
+I created a merge conflict in my test repository using Git GUI. I created a new branch called `New-Branch` and changed a line in `README.md`. I then switched back to the `main` branch and changed the same line differently. After committing the changes on both branches, I merged `New-Branch` into `main`.
 
-```
-<<<<<< New-Branch
-This line was changed on new branch
-=======
+Git detected that both branches had changed the same line and could not automatically determine which version should be kept.
+
+### Conflict
+
+```text
+<<<<<< HEAD
 This line is changed in main branch
->>>>>>> main
+=======
+This line was changed on new branch
+>>>>>>> New-Branch
 ```
 
 ## What caused the conflict?
 
-Both `main` and `New-branch` modified the same line in README.md after diverging
-from a shared commit. Git can auto-merge non-overlapping changes, but when both
-branches touch the same lines, it can't tell which version is correct, so it
-flags a conflict and pauses the merge for a human decision.
+The conflict was caused because both `main` and `New-Branch` modified the **same line** in `README.md` after the branches had diverged from a shared commit.
+
+Git can automatically merge changes when they occur in different parts of a file. However, when two branches modify the same lines differently, Git cannot determine which change is correct. Therefore, Git stops the merge and requires the user to resolve the conflict manually.
 
 ## How did I resolve it?
 
-Opened the pull request on GitHub and used "Resolve conflicts" to open the
-inline editor. Reviewed the two conflicting versions shown between the <<<<<<<
-main and >>>>>>> new-branch markers, decided to [keep main's version / keep
-new-branch's version / combine both], removed the conflict markers, marked
-the file as resolved, and committed the merge directly from the PR.
+I used **Git GUI** to resolve the merge conflict.
+
+First, I opened the conflicted `README.md` file and reviewed the changes from both branches. Git displayed the conflicting sections so I could compare the version from `main` with the version from `New-Branch`.
+
+I decided which version should be kept, removed the conflict markers, and saved the file. I then staged the resolved file in Git GUI and completed the merge commit.
+
+After resolving the conflict, I checked the repository to make sure there were no remaining conflicts. Finally, I pushed the changes to GitHub.
 
 ## What did I learn?
 
-- Conflicts happen at the line level, not the whole file — Git merges everything
-  else automatically.
-- GitHub's web conflict editor lets you resolve simple conflicts without needing
-  the command line, as long as the conflict isn't too complex.
-- The markers `<<<<<<<`, `=======`, `>>>>>>>` represent "your branch's version"
-  vs. "the incoming branch's version" — understanding that structure makes
-  resolving conflicts much less intimidating.
+* Merge conflicts happen when different branches make conflicting changes to the same part of a file.
+* Git can automatically merge non-overlapping changes, but conflicts require a decision from the developer.
+* The conflict markers `<<<<<<<`, `=======`, and `>>>>>>>` show the different versions of the conflicting code.
+* Git GUI makes it easier to review and resolve conflicts visually without using the command line.
+* After resolving a conflict, the file must be saved, staged, and committed to complete the merge.
+* Understanding merge conflicts is important when working with multiple branches and collaborating with other developers.
+
 
 # Pull Request
 
