@@ -387,10 +387,10 @@ The function retrieves the Car object that was passed to RentActivity through an
      */
     private fun getCarFromIntent(): Car {
         var car = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("CAR_DATA", Car::class.java)!!
+            intent.getParcelableExtra("CAR_DATA", Car::class.java)
         } else {
             @Suppress("DEPRECATION")
-            intent.getParcelableExtra("CAR_DATA")!!
+            intent.getParcelableExtra("CAR_DATA")
         }
 
         return car?: throw IllegalArgumentException(
@@ -425,8 +425,12 @@ The refactored version removes both `!!` operators and allows `getParcelableExtr
 
 If `car` is not null, it is returned normally. If it is null, the function throws an `IllegalArgumentException` with the message `"Car data is required to open the rental screen"`.
 
-This makes the error handling explicit and prevents the null value from causing an unexpected `NullPointerException`.
+This makes the error handling explicit and prevents the null value from causing an unexpected `NullPointerException`.It also makes the function easier to understand 
+because the expected failure case is handled directly rather than relying on the !! operator.
 
+The refactoring maintains compatibility with both newer Android versions that use the TIRAMISU API and older Android versions that use the deprecated getParcelableExtra() method.
+
+Overall, the refactored code is safer, clearer, and more consistent with the reflection because the code no longer uses the !! operator.
 
 
 # Refactoring Code for Simplicity
