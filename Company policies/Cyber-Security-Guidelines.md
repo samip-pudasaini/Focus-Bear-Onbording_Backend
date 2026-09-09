@@ -31,3 +31,16 @@ This was my one new cyber security habit, making sure my device is locked everyt
 For my computer, I have added dynamic lock, linked to my mobile, so it is locked as soon as I walk away.
 Added dynamic lock
 ![Computer Protection](<Screenshot 2026-08-23 021647.png>)
+
+### Two-Factor Authentication (2FA)
+
+I am also using 2FA authentication through an authenticator app. Proof cannot be provided through screenshots because the authenticator apps do not support screenshots due to privacy and security restrictions.
+
+Work accounts with 2FA enabled:
+- GitHub
+- Gmail
+
+I activated two-factor authentication (2FA) on my work GitHub account.
+**Proof:** GitHub requires two-factor authentication (2FA) for certain users and accounts, including users who actively contribute code or manage content on GitHub.com.
+
+For gmail, it sends notice to my mobile device with prompt of whether its me that is logging in and also requires me to enter a code provided on the logging screen on the authentication to let me pass.
