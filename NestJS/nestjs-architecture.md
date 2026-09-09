@@ -46,7 +46,7 @@ to pass in mock, in unit tests.
 # modularity
 
 It has clear separation of responsibilities
-
+```
 src/
 ├── users/
 │   ├── users.module.ts
@@ -57,6 +57,7 @@ src/
 │   ├── auth.controller.ts
 │   └── auth.service.ts
 └── app.module.ts
+```
 
 | Component                     | Responsibility                  |
 | ----------------------------- | ------------------------------- |

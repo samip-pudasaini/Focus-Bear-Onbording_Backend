@@ -82,6 +82,7 @@ i.e. it can be used as a dependency for other classes and injected onto it.
 
 # Provider scopes
 
+
 | SINGLETON | A single instance of the provider is shared across the entire
 application. The instance lifetime is tied directly to the application
 lifecycle. Once the application has bootstrapped, all singleton providers have
