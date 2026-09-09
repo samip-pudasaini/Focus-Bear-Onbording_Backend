@@ -9,11 +9,11 @@ more.
 ## Applying middleware
 
 ```ts
-import { Injecteble, NestMiddleware } from "@nestjs/common";
+import { Injectable, NestMiddleware } from "@nestjs/common";
 import { Request, Response, NextFunction } from "express";
 
-@Injecteble()
-export class LoggerMiddleWare implements NestMiddleWare {
+@Injectable()
+export class LoggerMiddleWare implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     console.log("Request...");
     next();
@@ -35,7 +35,7 @@ import { CatsModule } from "./cats/cats.module";
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(LoggerMiddleware)
+      .apply(LoggerMiddleWare)
       .forRoutes({ path: "cats", method: RequestMethod.GET });
   }
 }
@@ -74,12 +74,27 @@ import { tap } from "rxjs/operators";
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    console.log("Before...");
+    const request = context.switchToHttp().getRequest();
 
-    const now = Date.now();
-    return next
-      .handle()
-      .pipe(tap(() => console.log(`After... ${Date.now() - now}ms`)));
+        const { method, originalUrl, body } = request;
+        const now = Date.now();
+
+        console.log("Request:", {
+            method,
+            url: originalUrl,
+            body,
+        });
+
+        return next.handle().pipe(
+            tap((response) => 
+            console.log("Response:", {
+                method,
+                url: originalUrl,
+                body: response,
+                duration: `${Date.now() - now}ms`,
+            });
+            ),
+        );F
   }
 }
 ```
