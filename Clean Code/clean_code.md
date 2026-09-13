@@ -440,6 +440,10 @@ The refactored function handles the following edge case:
 - The function continues to support both newer Android versions using `TIRAMISU` and older Android versions.
 - The application therefore avoids an unexpected `NullPointerException` caused by the `!!` operator.
 
+### Git commit and Github push Image
+
+![Commit Proof](GitCommit.png)
+
 ## Reflection
 
 ### What problem did you identify?
