@@ -1,6 +1,6 @@
 # Middleware
 
-In the context fo web frameworks, middleware functions are functions that have
+In the context of web frameworks, middleware functions are functions that have
 access to the request(req) and response(res) objects. They provide a way to
 execute code before the final request handler is invoked. Middleware can perform
 various tasks such as logging, authentication, validation, error handling, and
@@ -13,7 +13,7 @@ import { Injectable, NestMiddleware } from "@nestjs/common";
 import { Request, Response, NextFunction } from "express";
 
 @Injectable()
-export class LoggerMiddleWare implements NestMiddleware {
+export class LoggerMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     console.log("Request...");
     next();
@@ -28,14 +28,14 @@ import {
   MiddlewareConsumer,
   RequestMethod,
 } from "@nestjs/common";
-import { LoggerMiddleWare } from "./common/middleware/logger.middleware";
+import { LoggerMiddleware } from "./common/middleware/logger.middleware";
 import { CatsModule } from "./cats/cats.module";
 
 @Module({ imports: [CatsModule] })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(LoggerMiddleWare)
+      .apply(LoggerMiddleware)
       .forRoutes({ path: "cats", method: RequestMethod.GET });
   }
 }
@@ -47,7 +47,7 @@ Interceptors are the most powerful form of the request-response pipeline. They
 have direct access to the request before hitting the route handler. We can
 mutate the response after it has passed through the route handler.
 
-Lets take a typical request-response between client and server, where client is
+Let's take a typical request-response between client and server, where client is
 making a request to the Nest API endpoints. The server will process that request
 and send back a response to the client. An interceptor is what lies between the
 request and the response.
@@ -94,7 +94,7 @@ export class LoggingInterceptor implements NestInterceptor {
                 duration: `${Date.now() - now}ms`,
             });
             ),
-        );F
+        );
   }
 }
 ```
@@ -105,7 +105,7 @@ The `ClassSerializerInterceptor` interceptor uses the powerful class-transformer
 package to transform/serialize the objects returned by your controller.
 
 Since interceptor controls the response flow, it uses the class-transformer to
-transform the returned object before NestJS sents the HTTP response to the
+transform the returned object before NestJS sends the HTTP response to the
 client.
 
 Example: Exclude properties
