@@ -43,29 +43,37 @@
 
 ## Best practices
 
-Variable names should reflect the value the variable is storing, so name them using a noun.
-For example, let’s say we have a website with users, and we need a variable to store an individual user. This is what our code can look like:
+Variable names should reflect the value the variable is storing, so name them
+using a noun. For example, let’s say we have a website with users, and we need a
+variable to store an individual user. This is what our code can look like:
 `User user = new User();`
 
 **General Naming Rules:**
 
-- A slightly longer, descriptive name is always better than a short, ambiguous acronym
-- Avoid single-letter variables like a, b or x. The only exception is for loop counters like i or j
+- A slightly longer, descriptive name is always better than a short, ambiguous
+  acronym
+- Avoid single-letter variables like a, b or x. The only exception is for loop
+  counters like i or j
 - Use English and standard ASCII
-- Do not include types in names (For example: strName or arrUsers). Modern editors track variable types automatically
-- Explicitly state units: If a variable stores time or size, add the unit to prevent logic errors.
+- Do not include types in names (For example: strName or arrUsers). Modern
+  editors track variable types automatically
+- Explicitly state units: If a variable stores time or size, add the unit to
+  prevent logic errors.
 
 **Best Practices for Naming Variables**
 
 - Nouns for data entities (e.g. totalPrice, userEmail)
-- Boolean prefixes: use helper verbs like is, has, or can (e.g. isLoggedIn, hasPermission, canEdit)
+- Boolean prefixes: use helper verbs like is, has, or can (e.g. isLoggedIn,
+  hasPermission, canEdit)
 - Consistent plurals for arrays (e.g. users or products_list)
 
 **Best Practices for Naming Variables**
 
 - Start with a verb (e.g. calculateTotal(), sendEmail())
 - Avoid filler words (e.g. handleData(), process() or run())
-- Match side effects: get (which implies a quick data fetch) if the function performs a heavy background calculation or database modification. Use calculate or update instead.
+- Match side effects: get (which implies a quick data fetch) if the function
+  performs a heavy background calculation or database modification. Use
+  calculate or update instead.
 
 **Unclear Variable Name**
 
@@ -104,13 +112,26 @@ For example, let’s say we have a website with users, and we need a variable to
 
 ## Best Practices
 
-- Using Descriptive Function Names that conveys its purpose, making it easy for others and yourself to understand its role within the code.
-- A single function should be focused on a single task or responsibility. This not only makes them easier to understand but also promotes modular and reusable code.
-- Strive for concise functions. Small functions are easier to comprehend and maintain. If a function becomes too lengthy, consider breaking it down into smaller, more specialized functions.
-- Avoid functions with an excessive number of parameters. This simplifies function calls and reduces the likelihood of errors.
-- Clean and consistern formatting. Use proper spacing, indentation, and line breaks to enhance readability.
-- Encapsulate complex conditions within well-named functions. Instead of cluttering your code with intricate logical checks, delegate them to separate functions with descriptive names. This enhances clarity and promotges code reuse.
-- Avoid using boolean flags as function parameters. If a function's behavior significantly differs based on a boolean parameter, consider splitting it into two separate functions. This improves readability and reduces potential confusion.
+- Using Descriptive Function Names that conveys its purpose, making it easy for
+  others and yourself to understand its role within the code.
+- A single function should be focused on a single task or responsibility. This
+  not only makes them easier to understand but also promotes modular and
+  reusable code.
+- Strive for concise functions. Small functions are easier to comprehend and
+  maintain. If a function becomes too lengthy, consider breaking it down into
+  smaller, more specialized functions.
+- Avoid functions with an excessive number of parameters. This simplifies
+  function calls and reduces the likelihood of errors.
+- Clean and consistern formatting. Use proper spacing, indentation, and line
+  breaks to enhance readability.
+- Encapsulate complex conditions within well-named functions. Instead of
+  cluttering your code with intricate logical checks, delegate them to separate
+  functions with descriptive names. This enhances clarity and promotges code
+  reuse.
+- Avoid using boolean flags as function parameters. If a function's behavior
+  significantly differs based on a boolean parameter, consider splitting it into
+  two separate functions. This improves readability and reduces potential
+  confusion.
 
 ## Example of a Long, Complex Function
 
@@ -144,14 +165,19 @@ public void ProcessOrder(double price, int quantity, string customerType)
 }
 ```
 
-Why this function is difficulat ot maintain:
-The function has too many responsibilities. It validates the order, calculates the subtotal, applies discounts, calculates tax, and displays the result. If one part needs to be changed, the developer has to work inside the same large function.
+Why this function is difficulat ot maintain: The function has too many
+responsibilities. It validates the order, calculates the subtotal, applies
+discounts, calculates tax, and displays the result. If one part needs to be
+changed, the developer has to work inside the same large function.
 
-This makes the function less readable and harder to test. For example, testing the discount calculation requires going through the entire ProcessOrder function.
+This makes the function less readable and harder to test. For example, testing
+the discount calculation requires going through the entire ProcessOrder
+function.
 
 ## Refactored Version
 
-The function can be divided into smaller functions, with each function having one clear responsibility.
+The function can be divided into smaller functions, with each function having
+one clear responsibility.
 
 ```
 public void ProcessOrder(double price, int quantity, string customerType)
@@ -218,10 +244,15 @@ private void DisplayOrderSummary(double subtotal, double tax, double total)
 
 # Don't Repeat Yourself (DRY)
 
-DRY is a software development principle that avoids duplication of logic by promoting reusable components and code. It ensures changes are made in one place, improving maintainability and consistency. DRY works with modular design and SRP to build scalable and efficient systems.
+DRY is a software development principle that avoids duplication of logic by
+promoting reusable components and code. It ensures changes are made in one
+place, improving maintainability and consistency. DRY works with modular design
+and SRP to build scalable and efficient systems.
 
-- Promotes code reuse by reducing duplication and ensuring consistency across the codebase
-- Centralizes logic to minimize errors, simplify updates, and support SRP for better system design.
+- Promotes code reuse by reducing duplication and ensuring consistency across
+  the codebase
+- Centralizes logic to minimize errors, simplify updates, and support SRP for
+  better system design.
 
 **Before Refactoring**
 
@@ -341,21 +372,32 @@ private void DisplayTotal(double total)
 
 ### Comments
 
-- Explan why, not what: Comments should explain the reason behind complex logic rather than repeating what the code already says.
+- Explan why, not what: Comments should explain the reason behind complex logic
+  rather than repeating what the code already says.
 - Keep comments concise: Avoid long explanations when a short comment is enough.
-- Keep comments updated: Outdated comments can be more confusing than having no comment.
-- Use comments for complex logic: Explain unusual algorithms, business rules, or workarounds.
-- Avoid unnecessary comments: Well-named variables and functions can often make comments unnecessary.
-- Use consistent formatting: Follow the commenting style used by the project or language.
+- Keep comments updated: Outdated comments can be more confusing than having no
+  comment.
+- Use comments for complex logic: Explain unusual algorithms, business rules, or
+  workarounds.
+- Avoid unnecessary comments: Well-named variables and functions can often make
+  comments unnecessary.
+- Use consistent formatting: Follow the commenting style used by the project or
+  language.
 
 ### Documentation
 
-- Use clear and simple language: Documentation should be easy for other developers to understand.
-- Explain how to use the code: Include setup instructions, requirements, examples, and expected behaviour.
-- Document public methods and classes: Explain their purpose, parameters, return values, and possible errors.
-- Keep documentation organised: Use headings, lists, and examples to make information easy to find.
-- Keep it up to date: Update documentation whenever the code or its behaviour changes.
-- Include examples when useful: Examples can make complex functionality much easier to understand.
+- Use clear and simple language: Documentation should be easy for other
+  developers to understand.
+- Explain how to use the code: Include setup instructions, requirements,
+  examples, and expected behaviour.
+- Document public methods and classes: Explain their purpose, parameters, return
+  values, and possible errors.
+- Keep documentation organised: Use headings, lists, and examples to make
+  information easy to find.
+- Keep it up to date: Update documentation whenever the code or its behaviour
+  changes.
+- Include examples when useful: Examples can make complex functionality much
+  easier to understand.
 
 ## Examples
 
@@ -391,9 +433,11 @@ if (customerType == "Premium")
 
 From one of my projects I have done,
 **https://github.com/samip-pudasaini/CarRental/blob/main/app/src/main/java/com/example/carrental/RentActivity.kt**
-I found the getCarFromIntent() in my RentActivity.kt file in my Car Rental Android project.
-The function retrieves the Car object that was passed to RentActivity through an Android Intent. The original function used the !! operator, which could cause the application to crash if the CAR_DATA value was missing from the I
-![Original Code](<Screenshot 2026-08-19 210959.png>)
+I found the getCarFromIntent() in my RentActivity.kt file in my Car Rental
+Android project. The function retrieves the Car object that was passed to
+RentActivity through an Android Intent. The original function used the !!
+operator, which could cause the application to crash if the CAR_DATA value was
+missing from the I ![Original Code](<Screenshot 2026-08-19 210959.png>)
 
 ```kotlin
     /**
@@ -434,11 +478,15 @@ The function retrieves the Car object that was passed to RentActivity through an
 The refactored function handles the following edge case:
 
 - The `CAR_DATA` value is missing from the Intent.
-- The `getParcelableExtra()` result is allowed to be `null` instead of using the `!!` operator.
+- The `getParcelableExtra()` result is allowed to be `null` instead of using the
+  `!!` operator.
 - The function explicitly checks whether the returned `Car` object is `null`.
-- If the value is missing, an `IllegalArgumentException` is thrown with a clear message explaining the problem.
-- The function continues to support both newer Android versions using `TIRAMISU` and older Android versions.
-- The application therefore avoids an unexpected `NullPointerException` caused by the `!!` operator.
+- If the value is missing, an `IllegalArgumentException` is thrown with a clear
+  message explaining the problem.
+- The function continues to support both newer Android versions using `TIRAMISU`
+  and older Android versions.
+- The application therefore avoids an unexpected `NullPointerException` caused
+  by the `!!` operator.
 
 ### Git commit and Github push Image
 
@@ -448,34 +496,51 @@ The refactored function handles the following edge case:
 
 ### What problem did you identify?
 
-The original function was risky because it assumed that the required `Car` object would always be available in the Intent. The `!!` operator forced Kotlin to treat the returned value as non-null. If `CAR_DATA` was missing, the application could crash with a `NullPointerException`.
+The original function was risky because it assumed that the required `Car`
+object would always be available in the Intent. The `!!` operator forced Kotlin
+to treat the returned value as non-null. If `CAR_DATA` was missing, the
+application could crash with a `NullPointerException`.
 
-This was an edge case that the original code did not handle safely because it relied on the assumption that the Intent would always contain the required data.
+This was an edge case that the original code did not handle safely because it
+relied on the assumption that the Intent would always contain the required data.
 
 ### How did the refactoring improve the code?
 
-The refactored version removes both `!!` operators and allows `getParcelableExtra()` to return a nullable `Car`. The result is stored in the nullable `car` variable and then checked using the Elvis operator (`?:`).
+The refactored version removes both `!!` operators and allows
+`getParcelableExtra()` to return a nullable `Car`. The result is stored in the
+nullable `car` variable and then checked using the Elvis operator (`?:`).
 
-If `car` is not null, it is returned normally. If it is null, the function throws an `IllegalArgumentException` with the message `"Car data is required to open the rental screen"`.
+If `car` is not null, it is returned normally. If it is null, the function
+throws an `IllegalArgumentException` with the message
+`"Car data is required to open the rental screen"`.
 
-This makes the error handling explicit and prevents the null value from causing an unexpected `NullPointerException`.It also makes the function easier to understand
-because the expected failure case is handled directly rather than relying on the !! operator.
+This makes the error handling explicit and prevents the null value from causing
+an unexpected `NullPointerException`.It also makes the function easier to
+understand because the expected failure case is handled directly rather than
+relying on the !! operator.
 
-The refactoring maintains compatibility with both newer Android versions that use the TIRAMISU API and older Android versions that use the deprecated getParcelableExtra() method.
+The refactoring maintains compatibility with both newer Android versions that
+use the TIRAMISU API and older Android versions that use the deprecated
+getParcelableExtra() method.
 
-Overall, the refactored code is safer, clearer, and more consistent with the reflection because the code no longer uses the !! operator.
+Overall, the refactored code is safer, clearer, and more consistent with the
+reflection because the code no longer uses the !! operator.
 
 # Refactoring Code for Simplicity
 
 ## common techniques
 
 - Extract Function/Method – pull a chunk of logic into its own named function
-- Replace Nested Conditionals with Guard Clauses – return early instead of deeply nesting if/else
+- Replace Nested Conditionals with Guard Clauses – return early instead of
+  deeply nesting if/else
 - Replace Magic Numbers/Strings with Named Constants
-- Decompose Conditional – split complex boolean logic into well-named helper predicates
+- Decompose Conditional – split complex boolean logic into well-named helper
+  predicates
 - Single Responsibility per Function – one function does one thing
-- Replace Loop with Pipeline (map/filter/reduce instead of manual loops with mutation)
-- Introduce Parameter Object – bundle related params into one object instead of a long argument list
+- Replace Loop with Pipeline (map/filter/reduce instead of manual loops with
+  mutation)
+- Introduce Parameter Object – bundle related params into one object instead of
+  a long argument list
 - Remove Duplication
 
 ## Example
@@ -501,7 +566,8 @@ function getStatus(user)
 }
 ```
 
-Here, it doesnot look complicated, but when you look at the first if condition and the nesting, we know that anyone of age less than 18 will not be active.
+Here, it doesnot look complicated, but when you look at the first if condition
+and the nesting, we know that anyone of age less than 18 will not be active.
 
 So refactoring as such
 
@@ -582,8 +648,141 @@ Tests:       5 passed, 5 total
 
 ### How do unit tests help keep code clean?
 
-Unit tests help keep code clean by making sure each function does what it is supposed to do. They encourage developers to write small, focused functions that are easier to test and understand. Unit tests also make it safer to change or refactor code because they can quickly identify if a change has broken existing functionality.
+Unit tests help keep code clean by making sure each function does what it is
+supposed to do. They encourage developers to write small, focused functions that
+are easier to test and understand. Unit tests also make it safer to change or
+refactor code because they can quickly identify if a change has broken existing
+functionality.
 
 ### What issues did you find while testing?
 
-While testing the addition function, during the initial testcase, I had only tested the positive number addition, which was a oversight. SO I created another test, the final one that would check positive numbers, negative numbers, and 0. The tests confirmed that the function correctly handles different cases. No issues were found with the the addition function during this testing. Testing negative numbers was particularly useful because it confirmed that the function correctly handles both positive and negative values.
+While testing the addition function, during the initial testcase, I had only
+tested the positive number addition, which was a oversight. SO I created another
+test, the final one that would check positive numbers, negative numbers, and 0.
+The tests confirmed that the function correctly handles different cases. No
+issues were found with the the addition function during this testing. Testing
+negative numbers was particularly useful because it confirmed that the function
+correctly handles both positive and negative values.
+
+# Code Formatting and Style Guides
+
+## Why is code formatting important?
+
+Consistent code formatting is important because it makes code easier to read and
+understand. When developers follow the same formatting rules, the codebase
+becomes more consistent and easier to maintain.
+
+It also makes it easier for developers to review each other's code because they
+do not have to spend time interpreting different formatting styles.
+
+Using tools such as Prettier and ESLint can automate these rules and reduce
+unnecessary formatiting differences between developers.
+
+## Airbnb JavaScript Style Guide
+
+I reviewed the Airbnb JavaScript Style Guide. It provides conventions for
+writing consistent JavaScript, including rules for variables, functions,
+objects, arrays, naming, equality, and formatting.
+
+Some examples include preferring `const` when a variable is not reassigned,
+using strict equality (`===`), and following consistent naming and formatting
+conventions.
+
+| Area          | Airbnb recommendation                                 | Example                          |
+| ------------- | ----------------------------------------------------- | -------------------------------- |
+| Variables     | Prefer `const`; use `let` when reassignment is needed | `const name = 'Sam';`            |
+| Semicolons    | Use semicolons                                        | `const x = 10;`                  |
+| Quotes        | Use single quotes                                     | `'hello'`                        |
+| Equality      | Use strict equality                                   | `x === 10`                       |
+| Functions     | Prefer arrow functions where appropriate              | `const add = (a, b) => a + b;`   |
+| Objects       | Use shorthand properties                              | `{ name, age }`                  |
+| Arrays        | Prefer array methods                                  | `items.map(item => item.name)`   |
+| Destructuring | Use destructuring when useful                         | `const { name, age } = user;`    |
+| Modules       | Use ES modules                                        | `import User from './User';`     |
+| Naming        | Use `camelCase` for variables/functions               | `getUserData()`                  |
+| Classes       | Use `PascalCase`                                      | `class UserAccount {}`           |
+| Constants     | Use descriptive names                                 | `const MAX_RETRIES = 3;`         |
+| Comments      | Write useful comments, not obvious ones               | `// Retry after network timeout` |
+
+**Airbnb-style formatting**
+
+```JS
+const user = {
+  name: 'John',
+  age: 20,
+};
+
+const getName = user => user.name;
+```
+
+## ESLint vs Prettier
+
+For Prettier, it automattically makes code follow consistent formatting rules
+rather than formatting it differently.
+
+As for ESLint, it looks for potential problems or violations of configured
+JavaScript rules.
+
+For example:
+
+```JS
+const userName = 'John';
+
+if (userName === 'John') {
+  console.log("Hello");
+}
+else
+{
+    console.log("Goodbye");
+}
+```
+
+ESLint flags that console is not defined.
+
+## Installation Proof
+
+Proof of installation and configuration ESLint and Prettier in my development
+environment. ![Devlopment environment](Dev_env.png)
+
+## What issues did the linter detect?
+
+```
+(node:28848) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Z:/test-repo/eslint.config.js?mtime=1789322998236 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\Z:\test-repo\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Z:\test-repo\check.js
+  4:3  error  'console' is not defined  no-undef
+  7:5  error  'console' is not defined  no-undef
+```
+
+ESLint initially detected two no-undef errors because console was not recognised as a defined global. I configured ESLint for the Node.js environment so that Node's global variables, including console, were recognised.
+
+FIX:
+```js
+// eslint.config.js
+import js from "@eslint/js";
+import { defineConfig } from "eslint/config";
+
+export default defineConfig([
+	{
+		files: ["**/*.js"],
+		plugins: {
+			js,
+		},
+		extends: ["js/recommended"],
+		rules: {
+			"no-unused-vars": "warn",
+		},
+	},
+]);
+```
+
+## Did formatting the code make it easier to read?
+
+Yes. After running Prettier, the code became more consistent because spacing,
+indentation, line breaks, and other formatting were standardized.
+
+This made the structure of the code easier to follow and reduced visual
+distractions caused by inconsistent formatting.
