@@ -676,7 +676,7 @@ It also makes it easier for developers to review each other's code because they
 do not have to spend time interpreting different formatting styles.
 
 Using tools such as Prettier and ESLint can automate these rules and reduce
-unnecessary formatiting differences between developers.
+unnecessary formatting differences between developers.
 
 ## Airbnb JavaScript Style Guide
 
@@ -706,18 +706,18 @@ conventions.
 
 **Airbnb-style formatting**
 
-```JS
+```js
 const user = {
-  name: 'John',
+  name: "John",
   age: 20,
 };
 
-const getName = user => user.name;
+const getName = (user) => user.name;
 ```
 
 ## ESLint vs Prettier
 
-For Prettier, it automattically makes code follow consistent formatting rules
+For Prettier, it automatically makes code follow consistent formatting rules
 rather than formatting it differently.
 
 As for ESLint, it looks for potential problems or violations of configured
@@ -725,31 +725,31 @@ JavaScript rules.
 
 For example:
 
-```JS
-const userName = 'John';
+```js
+const userName = "John";
 
-if (userName === 'John') {
+if (userName === "John") {
   console.log("Hello");
-}
-else
-{
-    console.log("Goodbye");
+} else {
+  console.log("Goodbye");
 }
 ```
 
-ESLint flags that console is not defined.
+ESLint flags that `console` is not defined.
 
 ## Installation Proof
 
-Proof of installation and configuration ESLint and Prettier in my development
-environment. ![Devlopment environment](Dev_env.png)
+Proof of installation and configuration of ESLint and Prettier in my development
+environment.
+
+![Development environment](Dev_env.png)
 
 ## Configuration
 
-**prettier**
+**Prettier**
 
 ```json
-//.prettierrc
+// .prettierrc
 {
   "singleQuote": true,
   "semi": true
@@ -777,10 +777,10 @@ export default defineConfig([
 ]);
 ```
 
-Configured in the project
+Configured in the project:
 
 ```json
-//package.json
+// package.json
 {
   "name": "test-repo",
   "version": "1.0.0",
@@ -793,9 +793,14 @@ Configured in the project
 }
 ```
 
-## What issues did the linter detect?
+## Commands Used
 
-**Lint RESULT**
+- Lint: `npx eslint .`
+- Format: `npx prettier --write .`
+- I also used VS Code's built-in format shortcut (**Shift+Alt+F**) during
+  development to format files as I worked.
+
+**THE OUTPUT**
 
 ```
 (node:28848) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Z:/test-repo/eslint.config.js?mtime=1789322998236 is not specified and it doesn't parse as CommonJS.
@@ -808,22 +813,66 @@ Z:\test-repo\check.js
   7:5  error  'console' is not defined  no-undef
 ```
 
-ESLint initially detected two no-undef errors because console was not recognised
-as a defined global. I configured ESLint for the Node.js environment so that
-Node's global variables, including console, were recognised.
-
-FIX:
+**CHANGES MADE**
 
 ```js
 // eslint.config.js
 import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
+import globals from "globals";
 
 export default defineConfig([
   {
     files: ["**/*.js"],
     plugins: {
       js,
+    },
+    languageOptions: {
+      globals: globals.node,
+    },
+    extends: ["js/recommended"],
+    rules: {
+      "no-unused-vars": "warn",
+    },
+  },
+]);
+```
+
+## What issues did the linter detect?
+
+**Lint result**
+
+```
+(node:28848) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Z:/test-repo/eslint.config.js?mtime=1789322998236 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\Z:\test-repo\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Z:\test-repo\check.js
+  4:3  error  'console' is not defined  no-undef
+  7:5  error  'console' is not defined  no-undef
+```
+
+ESLint initially detected two `no-undef` errors because `console` was not
+recognised as a defined global. I configured ESLint for the Node.js environment
+so that Node's global variables, including `console`, were recognised.
+
+**Fix:**
+
+```js
+// eslint.config.js
+import js from "@eslint/js";
+import { defineConfig } from "eslint/config";
+import globals from "globals";
+
+export default defineConfig([
+  {
+    files: ["**/*.js"],
+    plugins: {
+      js,
+    },
+    languageOptions: {
+      globals: globals.node,
     },
     extends: ["js/recommended"],
     rules: {
@@ -836,7 +885,6 @@ export default defineConfig([
 ## Did formatting the code make it easier to read?
 
 Yes. After running Prettier, the code became more consistent because spacing,
-indentation, line breaks, and other formatting were standardized.
-
-This made the structure of the code easier to follow and reduced visual
-distractions caused by inconsistent formatting.
+indentation, line breaks, and other formatting were standardized. This made the
+structure of the code easier to follow and reduced visual distractions caused by
+inconsistent formatting.
