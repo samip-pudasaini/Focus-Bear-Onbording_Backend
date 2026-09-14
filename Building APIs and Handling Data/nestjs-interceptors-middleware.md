@@ -163,28 +163,28 @@ focuses on errors.
 ```
 Client
   |
-  | Request
-  ▼
-Interceptor
+  | (Request)
   |
-  ▼
-Controller
-  |
-  ▼
-Service
-  |
-  | Error occurs
-  ▼
-Interceptor catches/logs error
-  |
-  ▼
-Error continues through NestJS
-  |
-  ▼
-Exception handling
-  |
-  ▼
-Response to Client
+  |--> Interceptor
+    |
+    |
+    |-->  Controller
+      |
+      |
+      |-->Service
+        |
+        | (Error occurs)
+        |
+        |-->Interceptor catches/logs error
+          |
+          |
+          |-->Error continues through NestJS
+            |
+            |
+            |-->Exception handling
+              |
+              |
+              |--> Response to Client
 ```
 
 Example:
@@ -205,7 +205,7 @@ export class LoggerErrorInterceptor implements NestInterceptor {
 ```
 
 So if your service does: `throw new Error('User not found');`, the interceptor
-can log `Error: User not found` then it can `throw error;` passes the error
+can log `Error: User not found` then it rethrows the error to NestJS.
 onward so NestJS can handle it normally.
 
 In simple terms, Something went wrong while processing this request. Let me log
@@ -215,7 +215,7 @@ the error before NestJS handles it.
 
 ## What is the difference between interceptor and middleware?
 
-Middleware runs before the route handler and primarily works with the request
+Middleware runs before the controller handler executes. and primarily works with the request
 and response objects. An interceptor wraps around the route handler, allowing it
 to execute code both before and after the handler runs. This makes interceptors
 more suitable for processing controller responses and handling operations around
