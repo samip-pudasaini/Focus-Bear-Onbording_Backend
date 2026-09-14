@@ -744,7 +744,58 @@ ESLint flags that console is not defined.
 Proof of installation and configuration ESLint and Prettier in my development
 environment. ![Devlopment environment](Dev_env.png)
 
+## Configuration
+
+**prettier**
+
+```json
+//.prettierrc
+{
+  "singleQuote": true,
+  "semi": true
+}
+```
+
+**ESLint**
+
+```js
+// eslint.config.js
+import js from "@eslint/js";
+import { defineConfig } from "eslint/config";
+
+export default defineConfig([
+  {
+    files: ["**/*.js"],
+    plugins: {
+      js,
+    },
+    extends: ["js/recommended"],
+    rules: {
+      "no-unused-vars": "warn",
+    },
+  },
+]);
+```
+
+Configured in the project
+
+```json
+//package.json
+{
+  "name": "test-repo",
+  "version": "1.0.0",
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "globals": "^15.0.0",
+    "prettier": "^3.9.6"
+  }
+}
+```
+
 ## What issues did the linter detect?
+
+**Lint RESULT**
 
 ```
 (node:28848) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Z:/test-repo/eslint.config.js?mtime=1789322998236 is not specified and it doesn't parse as CommonJS.
@@ -757,25 +808,28 @@ Z:\test-repo\check.js
   7:5  error  'console' is not defined  no-undef
 ```
 
-ESLint initially detected two no-undef errors because console was not recognised as a defined global. I configured ESLint for the Node.js environment so that Node's global variables, including console, were recognised.
+ESLint initially detected two no-undef errors because console was not recognised
+as a defined global. I configured ESLint for the Node.js environment so that
+Node's global variables, including console, were recognised.
 
 FIX:
+
 ```js
 // eslint.config.js
 import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig([
-	{
-		files: ["**/*.js"],
-		plugins: {
-			js,
-		},
-		extends: ["js/recommended"],
-		rules: {
-			"no-unused-vars": "warn",
-		},
-	},
+  {
+    files: ["**/*.js"],
+    plugins: {
+      js,
+    },
+    extends: ["js/recommended"],
+    rules: {
+      "no-unused-vars": "warn",
+    },
+  },
 ]);
 ```
 
