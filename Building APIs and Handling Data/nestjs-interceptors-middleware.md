@@ -43,20 +43,18 @@ export class AppModule implements NestModule {
 
 # Interceptors
 
-Interceptors are the most powerful form of the request-response pipeline. They
-have direct access to the request before hitting the route handler. We can
-mutate the response after it has passed through the route handler.
+Interceptors are used to wrap around the execution of a request handler. They
+can execute code before the route handler runs and after the route handler has
+completed.
 
-Let's take a typical request-response between client and server, where client is
-making a request to the Nest API endpoints. The server will process that request
-and send back a response to the client. An interceptor is what lies between the
-request and the response.
+They are useful for tasks such as logging, transforming responses, measuring
+execution time, and handling errors.
 
-We create an interceptor so that when a client makes a request to the server, it
-will be intercepted by the interceptor before the request reaches the server. In
-the interceptor, we can do any process and modify the request before it's sent
-to the server. We can also set up the interceptor to intercept the response
-before being sent back to the client.
+Let's take a typical request-response between a client and a server, where the
+client is making a request to a NestJS API endpoint. The server processes the
+request and sends a response back to the client. An interceptor can execute
+logic before the request reaches the route handler and can also process the
+result before it is sent back to the client.
 
 ## Simple Logging Interceptor
 
@@ -76,25 +74,25 @@ export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
 
-        const { method, originalUrl, body } = request;
-        const now = Date.now();
+    const { method, originalUrl, body } = request;
+    const now = Date.now();
 
-        console.log("Request:", {
-            method,
-            url: originalUrl,
-            body,
+    console.log("Request:", {
+      method,
+      url: originalUrl,
+      body,
+    });
+
+    return next.handle().pipe(
+      tap((response) => {
+        console.log("Response:", {
+          method,
+          url: originalUrl,
+          body: response,
+          duration: `${Date.now() - now}ms`,
         });
-
-        return next.handle().pipe(
-            tap((response) => 
-            console.log("Response:", {
-                method,
-                url: originalUrl,
-                body: response,
-                duration: `${Date.now() - now}ms`,
-            });
-            ),
-        );
+      }),
+    );
   }
 }
 ```
@@ -164,27 +162,27 @@ focuses on errors.
 
 ```
 Client
-  │
-  │ Request
+  |
+  | Request
   ▼
 Interceptor
-  │
+  |
   ▼
 Controller
-  │
+  |
   ▼
 Service
-  │
-  │ ❌ Error occurs
+  |
+  | Error occurs
   ▼
 Interceptor catches/logs error
-  │
+  |
   ▼
 Error continues through NestJS
-  │
+  |
   ▼
 Exception handling
-  │
+  |
   ▼
 Response to Client
 ```
