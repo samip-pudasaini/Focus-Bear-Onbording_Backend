@@ -4,45 +4,114 @@
 
 ## Testing
 
-I created a merge conflict in my test repository using Git GUI. I created a new branch called `New-Branch` and changed a line in `README.md`. I then switched back to the `main` branch and changed the same line differently. After committing the changes on both branches, I merged `New-Branch` into `main`.
+I created a merge conflict in my test repository using Git GUI. I created a new
+branch called `New-Branch` and changed a line in `README.md`. I then switched
+back to the `main` branch and changed the same line differently. After
+committing the changes on both branches, I merged `New-Branch` into `main`.
 
-Git detected that both branches had changed the same line and could not automatically determine which version should be kept.
+Git detected that both branches had changed the same line and could not
+automatically determine which version should be kept.
 
 ### Conflict
 
-```text
+```
 <<<<<< HEAD
 This line is changed in main branch
 =======
-This line was changed on new branch
+This line was changed on new branch new branch
 >>>>>>> New-Branch
 ```
 
 ## What caused the conflict?
 
-The conflict was caused because both `main` and `New-Branch` modified the **same line** in `README.md` after the branches had diverged from a shared commit.
+The conflict was caused because both `main` and `New-Branch` modified the **same
+line** in `README.md` after the branches had diverged from a shared commit.
 
-Git can automatically merge changes when they occur in different parts of a file. However, when two branches modify the same lines differently, Git cannot determine which change is correct. Therefore, Git stops the merge and requires the user to resolve the conflict manually.
+Git can automatically merge changes when they occur in different parts of a
+file. However, when two branches modify the same line differently, Git cannot
+determine which change is correct. Therefore, Git stops the merge and requires
+the developer to resolve the conflict manually.
 
 ## How did I resolve it?
 
 I used **Git GUI** to resolve the merge conflict.
 
-First, I opened the conflicted `README.md` file and reviewed the changes from both branches. Git displayed the conflicting sections so I could compare the version from `main` with the version from `New-Branch`.
+The steps I followed were:
 
-I decided which version should be kept, removed the conflict markers, and saved the file. I then staged the resolved file in Git GUI and completed the merge commit.
+1. I switched to the `main` branch in Git GUI.
+2. I selected the option to merge `New-Branch` into `main`.
+3. Git detected a conflict in `README.md` because both branches had modified the
+   same line.
+4. I opened the conflicted `README.md` file to review both versions.
+5. I compared the version from `main` with the version from `New-Branch`.
+6. I decided to keep the version from the `main` branch.
+7. I removed the `New-Branch` version and deleted the conflict markers:
+   - `<<<<<<< HEAD`
+   - `=======`
+   - `>>>>>>> New-Branch`
+8. The final line in `README.md` was:
 
-After resolving the conflict, I checked the repository to make sure there were no remaining conflicts. Finally, I pushed the changes to GitHub.
+This line is changed in main branch
+
+9. I saved the resolved `README.md` file.
+10. I returned to Git GUI and refreshed the repository status.
+11. I staged the resolved `README.md` file.
+12. I completed the merge by creating the merge commit.
+13. The merge commit message was:
+
+Merge branch 'New-Branch' into main
+
+14. I checked the repository to confirm that there were no remaining conflicts.
+15. Finally, I pushed the changes to GitHub.
+
+## Final Resolved `README.md`
+
+After resolving the conflict, the conflict markers and the unwanted `New-Branch`
+version were removed.
+
+The final `README.md` contained:
+
+This line is changed in main branch
+
+The final file no longer contained any conflict markers.
 
 ## What did I learn?
 
-* Merge conflicts happen when different branches make conflicting changes to the same part of a file.
-* Git can automatically merge non-overlapping changes, but conflicts require a decision from the developer.
-* The conflict markers `<<<<<<<`, `=======`, and `>>>>>>>` show the different versions of the conflicting code.
-* Git GUI makes it easier to review and resolve conflicts visually without using the command line.
-* After resolving a conflict, the file must be saved, staged, and committed to complete the merge.
-* Understanding merge conflicts is important when working with multiple branches and collaborating with other developers.
+Merge conflicts happen when different branches make conflicting changes to the
+same part of a file. Git can automatically merge non-overlapping changes, but
+conflicts require the developer to decide which changes should be kept.
 
+In this test, both branches changed the same line differently, so Git could not
+determine which version was correct. I resolved the conflict by keeping the
+`main` branch version and removing the `New-Branch` version.
+
+I also learned that resolving a conflict involves more than editing the file.
+After making the decision, I needed to remove the conflict markers, save the
+file, stage the resolved file, complete the merge commit, and check that no
+conflicts remained.
+
+Using Git GUI made the process easier to understand because I could visually see
+the repository status and the files involved in the merge. This exercise helped
+me understand how merge conflicts occur and how developers need to make
+deliberate decisions when combining changes from different branches.
+
+## Evidence
+
+### Git GUI Conflict
+
+![GIT GUI conflict show](<Screenshot 2026-09-09 230159.png>)
+
+### Final Resolved README
+
+I did not capture screenshots during the original conflict-resolution exercise.
+However, I documented the conflict, the resolution steps, and the final resolved
+content above.
+
+The final resolved line in `README.md` was:
+
+```text
+This line is changed in main branch
+```
 
 # Pull Request
 
@@ -124,7 +193,9 @@ that automated tools cannot.
 ## What does each command do?
 
 ```
+
 git checkout main -- <file>
+
 ```
 
 This command restores a specific file to the version that exists on the main
@@ -132,7 +203,9 @@ branch. It is useful because it only affects the selected file instead of the
 entire branch.
 
 ```
+
 git cherry-pick <commit>
+
 ```
 
 git cherry-pick applies a specific commit from another branch to the current
@@ -140,7 +213,9 @@ branch without merging the entire branch. During testing, I created a commit on
 one branch and successfully applied it to another.
 
 ```
+
 git log
+
 ```
 
 git log displays the commit history of a repository. It shows information such
@@ -148,7 +223,9 @@ as commit IDs, authors, dates, and commit messages. I used it to view the
 changes I had made over time.
 
 ```
+
 git blame <file>
+
 ```
 
 git blame shows which commit and author last modified each line of a file. It
@@ -243,3 +320,7 @@ For example, you might stage your completed changes, review them with git diff
 useful when you have multiple changes but only want to commit some of them.
 
 ![staging vs committing](<Screenshot 2026-08-18 164547.png>)
+
+```
+
+```
