@@ -704,7 +704,7 @@ conventions.
 | Constants     | Use descriptive names                                 | `const MAX_RETRIES = 3;`         |
 | Comments      | Write useful comments, not obvious ones               | `// Retry after network timeout` |
 
-**Airbnb-style formatting**
+**Airbnb-style formatting example**
 
 ```js
 const user = {
@@ -717,13 +717,13 @@ const getName = (user) => user.name;
 
 ## ESLint vs Prettier
 
-For Prettier, it automatically makes code follow consistent formatting rules
-rather than formatting it differently.
+Prettier automatically makes code follow consistent formatting rules rather than
+formatting it differently by hand.
 
-As for ESLint, it looks for potential problems or violations of configured
-JavaScript rules.
+ESLint looks for potential problems or violations of configured JavaScript rules
+(bugs, unused variables, undefined globals, etc.), rather than just formatting.
 
-For example:
+Example of something ESLint catches that Prettier would not:
 
 ```js
 const userName = "John";
@@ -735,39 +735,46 @@ if (userName === "John") {
 }
 ```
 
-ESLint flags that `console` is not defined.
+Without Node globals configured, ESLint flags `console` as undefined.
 
-## Installation Proof
+## Installation
 
-Proof of installation and configuration of ESLint and Prettier in my development
-environment.
+**Install commands used**
+
+```bash
+npm install --save-dev eslint @eslint/js globals prettier
+```
+
+**Installation proof**
 
 ![Development environment](Dev_env.png)
 
-## Configuration
+## Configuration Files
 
-**Prettier**
+**`.prettierrc` contents**
 
 ```json
-// .prettierrc
 {
   "singleQuote": true,
   "semi": true
 }
 ```
 
-**ESLint**
+**`eslint.config.js` contents (final, working version)**
 
 ```js
-// eslint.config.js
 import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
+import globals from "globals";
 
 export default defineConfig([
   {
     files: ["**/*.js"],
     plugins: {
       js,
+    },
+    languageOptions: {
+      globals: globals.node,
     },
     extends: ["js/recommended"],
     rules: {
@@ -777,10 +784,9 @@ export default defineConfig([
 ]);
 ```
 
-Configured in the project:
+**`package.json` (relevant excerpt)**
 
 ```json
-// package.json
 {
   "name": "test-repo",
   "version": "1.0.0",
@@ -793,14 +799,16 @@ Configured in the project:
 }
 ```
 
-## Commands Used
+## Commands Run
 
-- Lint: `npx eslint .`
-- Format: `npx prettier --write .`
-- I also used VS Code's built-in format shortcut (**Shift+Alt+F**) during
+- **Lint command:** `npx eslint .`
+- **Format command:** `npx prettier --write .`
+- Also used VS Code's built-in format shortcut (**Shift+Alt+F**) during
   development to format files as I worked.
 
-**THE OUTPUT**
+## Lint Output — Issues Found
+
+**Before fix**, running `npx eslint .` produced:
 
 ```
 (node:28848) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Z:/test-repo/eslint.config.js?mtime=1789322998236 is not specified and it doesn't parse as CommonJS.
@@ -813,78 +821,30 @@ Z:\test-repo\check.js
   7:5  error  'console' is not defined  no-undef
 ```
 
-**CHANGES MADE**
+**Issues identified:**
 
-```js
-// eslint.config.js
-import js from "@eslint/js";
-import { defineConfig } from "eslint/config";
-import globals from "globals";
+1. `console` was flagged as undefined (`no-undef`) because the Node.js global
+   environment was not configured in `eslint.config.js`.
+2. Node printed a module-type warning because `package.json` did not originally
+   declare `"type": "module"`.
 
-export default defineConfig([
-  {
-    files: ["**/*.js"],
-    plugins: {
-      js,
-    },
-    languageOptions: {
-      globals: globals.node,
-    },
-    extends: ["js/recommended"],
-    rules: {
-      "no-unused-vars": "warn",
-    },
-  },
-]);
-```
+## Fixes Made
 
-## What issues did the linter detect?
+1. Added `"type": "module"` to `package.json` to resolve the module-type
+   warning.
+2. Imported `globals` and added `languageOptions: { globals: globals.node }` to
+   `eslint.config.js` so Node's built-in globals (including `console`) are
+   recognised.
 
-**Lint result**
-
-```
-(node:28848) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Z:/test-repo/eslint.config.js?mtime=1789322998236 is not specified and it doesn't parse as CommonJS.
-Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
-To eliminate this warning, add "type": "module" to \\?\Z:\test-repo\package.json.
-(Use `node --trace-warnings ...` to show where the warning was created)
-
-Z:\test-repo\check.js
-  4:3  error  'console' is not defined  no-undef
-  7:5  error  'console' is not defined  no-undef
-```
-
-ESLint initially detected two `no-undef` errors because `console` was not
-recognised as a defined global. I configured ESLint for the Node.js environment
-so that Node's global variables, including `console`, were recognised.
-
-**Fix:**
-
-```js
-// eslint.config.js
-import js from "@eslint/js";
-import { defineConfig } from "eslint/config";
-import globals from "globals";
-
-export default defineConfig([
-  {
-    files: ["**/*.js"],
-    plugins: {
-      js,
-    },
-    languageOptions: {
-      globals: globals.node,
-    },
-    extends: ["js/recommended"],
-    rules: {
-      "no-unused-vars": "warn",
-    },
-  },
-]);
-```
+**After fix**, running `npx eslint .` again produced no errors — the `no-undef`
+errors for `console` were resolved.
 
 ## Did formatting the code make it easier to read?
 
 Yes. After running Prettier, the code became more consistent because spacing,
-indentation, line breaks, and other formatting were standardized. This made the
+indentation, line breaks, and other formatting were standardised. This made the
 structure of the code easier to follow and reduced visual distractions caused by
-inconsistent formatting.
+inconsistent formatting. Running ESLint separately caught a real bug (the
+undefined `console` reference) that Prettier's formatting pass would not have
+detected, which reinforced why using both tools together is useful: Prettier
+keeps style consistent, while ESLint catches actual problems in the code.
