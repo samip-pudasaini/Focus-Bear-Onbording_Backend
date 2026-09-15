@@ -715,15 +715,29 @@ const user = {
 const getName = (user) => user.name;
 ```
 
+## Did formatting the code make it easier to read?
+
+Yes. After running Prettier, the code became more consistent because spacing,
+indentation, line breaks, and other formatting were standardised. This made the
+structure of the code easier to follow and reduced visual distractions caused by
+inconsistent formatting. Running ESLint separately caught a real bug (the
+undefined `console` reference) that Prettier's formatting pass would not have
+detected, which reinforced why using both tools together is useful: Prettier
+keeps style consistent, while ESLint catches actual problems in the code.
+
 ## ESLint vs Prettier
 
-Prettier automatically makes code follow consistent formatting rules rather than
-formatting it differently by hand.
+Prettier automatically formats code according to consistent formatting rules,
+such as indentation, spacing, quotation marks, and semicolons. This means
+developers do not have to manually format every file in the same way.
 
-ESLint looks for potential problems or violations of configured JavaScript rules
-(bugs, unused variables, undefined globals, etc.), rather than just formatting.
+ESLint checks JavaScript code for potential problems and violations of
+configured rules. For example, it can detect undefined variables, unused
+variables, and other code-quality issues that a formatting tool would not
+detect.
 
-Example of something ESLint catches that Prettier would not:
+For example, the following code can be formatted by Prettier, but ESLint can
+identify problems that are unrelated to formatting:
 
 ```js
 const userName = "John";
@@ -735,34 +749,49 @@ if (userName === "John") {
 }
 ```
 
-Without Node globals configured, ESLint flags `console` as undefined.
+In my project, ESLint initially flagged `console` as undefined because the
+Node.js global environment had not been configured.
 
-## Installation
+### Installation
 
-**Install commands used**
+#### Install Commands Used
+
+I installed ESLint, the ESLint JavaScript configuration, Node.js globals, and
+Prettier using:
 
 ```bash
 npm install --save-dev eslint @eslint/js globals prettier
 ```
 
-**Installation proof**
+#### Installation Proof
+
+The installation was verified in my development environment.
 
 ![Development environment](Dev_env.png)
 
-## Configuration Files
+### Configuration Files
 
-**`.prettierrc` contents**
+#### `.prettierrc`
+
+The Prettier configuration used in the project is:
 
 ```json
+// .prettierrc
 {
   "singleQuote": true,
   "semi": true
 }
 ```
 
-**`eslint.config.js` contents (final, working version)**
+This configures Prettier to use single quotes and include semicolons.
+
+#### `eslint.config.js`
+
+The final working ESLint configuration is:
 
 ```js
+//eslint.config.js
+
 import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import globals from "globals";
@@ -784,10 +813,24 @@ export default defineConfig([
 ]);
 ```
 
-**`package.json` (relevant excerpt)**
+The important change was adding the Node.js globals:
+
+```js
+languageOptions: {
+  globals: globals.node,
+},
+```
+
+This allows ESLint to recognise Node.js globals such as `console`.
+
+#### `package.json`
+
+The relevant part of `package.json` is:
 
 ```json
 {
+  //package.json
+
   "name": "test-repo",
   "version": "1.0.0",
   "type": "module",
@@ -799,18 +842,52 @@ export default defineConfig([
 }
 ```
 
-## Commands Run
+The `"type": "module"` setting was added to tell Node.js that the project uses
+ES modules.
 
-- **Lint command:** `npx eslint .`
-- **Format command:** `npx prettier --write .`
-- Also used VS Code's built-in format shortcut (**Shift+Alt+F**) during
-  development to format files as I worked.
+### Commands Run
 
-## Lint Output — Issues Found
+#### ESLint
 
-**Before fix**, running `npx eslint .` produced:
+The lint command used was:
 
+npx eslint .
+
+`npx eslint`
+
+#### Prettier
+
+The formatting command used was:
+
+npx prettier --write .
+
+`npx prettier --write .`
+
+I also used VS Code's built-in formatting shortcut, `Shift + Alt + F`, while
+working on the files.
+
+### ESLint Output — Before Fix
+
+Before fixing the configuration, running:
+
+npx eslint .
+
+```bash
+npx eslint .
 ```
+
+produced:
+
+(node:28848) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Z:/test-repo/eslint.config.js?mtime=1789322998236 is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\Z:\test-repo\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+Z:\test-repo\check.js
+  4:3  error  'console' is not defined  no-undef
+  7:5  error  'console' is not defined  no-undef
+
+```text
 (node:28848) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Z:/test-repo/eslint.config.js?mtime=1789322998236 is not specified and it doesn't parse as CommonJS.
 Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
 To eliminate this warning, add "type": "module" to \\?\Z:\test-repo\package.json.
@@ -821,30 +898,107 @@ Z:\test-repo\check.js
   7:5  error  'console' is not defined  no-undef
 ```
 
-**Issues identified:**
+#### Issues Detected
 
-1. `console` was flagged as undefined (`no-undef`) because the Node.js global
-   environment was not configured in `eslint.config.js`.
-2. Node printed a module-type warning because `package.json` did not originally
-   declare `"type": "module"`.
+Two issues were identified:
 
-## Fixes Made
+1. `console` was flagged as undefined by the `no-undef` rule because the Node.js
+   global environment was not configured in ESLint.
+2. Node.js produced a module-type warning because `package.json` did not
+   originally contain `"type": "module"`.
 
-1. Added `"type": "module"` to `package.json` to resolve the module-type
-   warning.
-2. Imported `globals` and added `languageOptions: { globals: globals.node }` to
-   `eslint.config.js` so Node's built-in globals (including `console`) are
-   recognised.
+#### Fixes Made
 
-**After fix**, running `npx eslint .` again produced no errors — the `no-undef`
-errors for `console` were resolved.
+##### 1. Added `"type": "module"`
 
-## Did formatting the code make it easier to read?
+I added the following to `package.json`:
+
+```json
+"type": "module"
+```
+
+This resolved the module-type warning because Node.js could now recognise the
+project as using ES modules.
+
+##### 2. Configured Node.js Globals
+
+I imported the `globals` package:
+
+```js
+import globals from "globals";
+```
+
+and added:
+
+```js
+languageOptions: {
+  globals: globals.node,
+},
+```
+
+This configured ESLint with the Node.js global environment and allowed it to
+recognise `console`.
+
+### ESLint Output — After Fix
+
+After making these changes, I ran:
+
+npx eslint .
+
+```bash
+npx eslint .
+```
+
+The command completed without the previous `no-undef` errors. The `console`
+errors were therefore resolved.
+
+## Prettier Output
+
+I formatted the project using:
+
+npx prettier --write .
+
+```bash
+npx prettier --write .
+```
+
+Output:
+
+Z:\test-repo>npx prettier --write .
+.prettierrc 25ms (unchanged)
+check.js 8ms (unchanged)
+eslint.config.js 7ms (unchanged)
+package-lock.json 4ms (unchanged)
+package.json 1ms (unchanged)
+README.md 22ms (unchanged)
+
+```
+Z:\test-repo>npx prettier --write .
+.prettierrc 25ms (unchanged)
+check.js 8ms (unchanged)
+eslint.config.js 7ms (unchanged)
+package-lock.json 4ms (unchanged)
+package.json 1ms (unchanged)
+README.md 22ms (unchanged)
+
+```
+
+Prettier reported the files that it checked or formatted in the terminal and
+applied the configured formatting rules.
+
+### Prettier Evidence
+
+![Prettier formatting output](image.png)
+
+## Did Formatting the Code Make It Easier to Read?
 
 Yes. After running Prettier, the code became more consistent because spacing,
-indentation, line breaks, and other formatting were standardised. This made the
-structure of the code easier to follow and reduced visual distractions caused by
-inconsistent formatting. Running ESLint separately caught a real bug (the
-undefined `console` reference) that Prettier's formatting pass would not have
-detected, which reinforced why using both tools together is useful: Prettier
-keeps style consistent, while ESLint catches actual problems in the code.
+indentation, line breaks, quotation marks, and semicolon usage were
+standardised. This made the structure of the code easier to follow and reduced
+visual distractions caused by inconsistent formatting.
+
+ESLint and Prettier also demonstrated that formatting and code-quality checking
+serve different purposes. Prettier improved the presentation and consistency of
+the code, while ESLint identified the undefined `console` references. Using both
+tools together therefore provides better coverage than relying on either tool
+alone.
