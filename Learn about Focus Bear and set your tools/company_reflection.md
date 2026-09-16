@@ -5,8 +5,8 @@
 Our Founder and CEO, Jeremy Nagel was late-diagnosed with ADHD. He had tried
 every app, every system, so he built the thing he actually needed, something
 that starts the morning and then blocks the rabbit holes before you can fall in,
-and forgives me when I slip. Focus Bear is a tool that is build by ADHD brains,
-to reduce decisions, removes the willpower tax, amd guides you one step at a
+and forgives me when I slip. Focus Bear is a tool that is built by ADHD brains,
+to reduce decisions, removes the willpower tax, and guides you one step at a
 time instead of handing you a blank to-do list.
 
 ## What problem is Focus Bear solving?
@@ -20,7 +20,7 @@ focused on tasks without relying entirely on willpower or motivation.
 
 As someone who has been observing himself for doubts regarding having ADHD. The
 mission is very personal to me. ADHD is more of 'executive dysfunction' than
-huperactivity or lack of focus. Being torn between doing many tasks, or events
+hiperactivity or lack of focus. Being torn between doing many tasks, or events
 that are going to happen further in a day gives us choice paralysis, in turn
 being unable to do anything because of the lack of proper time evaluation. So
 the fact that we are trying to combat this with giving set focus times with
@@ -49,6 +49,16 @@ letting the pressure and chaos of the deadline making me rush to start and
 finish the tasks. So, I can personally relate to any of the challenges that
 Focus Bear aims to solve.
 
-# Knowing the product
+## Specific Life example
 
-## What did you learn about the product that you didn't know before?
+As I have said, with ADHD, the hard part is getting started, and well, taking a
+break afterwards as well, when there was no clear distinction I would just shut
+down.
+
+What I mean by this is that I have studied for like 2-3 hours and brain is
+overwhelmed and need rest, but that guilt of not studying makes it harder to
+rest, and if rest begins, the study might not be resumed after the break.
+
+So the indication of time to work and time to rest will make it such that I
+would not be overwhelmed and also be able to work/rest, which is what the
+desired circumstances should be.
