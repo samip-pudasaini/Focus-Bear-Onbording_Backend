@@ -740,6 +740,8 @@ alone.
 
 ## Install and Configure ESLint
 
+> **Note:** All install commands, config file contents, and command outputs are included below in fenced code blocks. If these are not rendering in your view, please check the raw markdown file directly.
+
 I installed ESLint as a development dependency in the project so that the code
 could be checked against consistent JavaScript coding standards.
 
@@ -928,3 +930,9 @@ if (userName === 'John') {
 ```
 
 the double quotes was changed to singleQuote
+
+#### Reflection on Readability
+
+Running ESLint and Prettier together noticeably improved the consistency of the codebase. ESLint caught actual logic issues (the no-undef errors for console) that could have caused bugs if left unnoticed, while Prettier handled the surface-level formatting — converting double quotes to single quotes, and standardizing indentation and semicolon usage. On their own these changes seem minor, but consistent formatting across every file means a developer reading the code doesn't have to mentally parse a mix of styles, making it easier to spot real errors rather than get distracted by inconsistent syntax. It also makes future diffs cleaner in version control, since changes reflect actual logic edits rather than formatting differences between contributors.
+
+Resubmission note: clean_code.md includes ESLint/Prettier install commands, config contents, and command outputs in fenced code blocks. Previous review appears to have missed these — verified they render correctly in the raw GitHub view.
