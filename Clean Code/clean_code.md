@@ -740,6 +740,8 @@ alone.
 
 # Code Formatting & Style Guides
 
+>Note: The detailed reflection on code formatting can be found in [clean_code_formatting.md](clean_code_formatting.md).
+
 Due to major problems in the review and checking of the issue #67 from the
 author,
 
@@ -750,3 +752,5 @@ full task from writing alone.
 
 I have moved this part of the onboarding reflection and task steps in another
 file: namely clean_code_formatting.md, (`clean_code_formatting.md`)
+
+The detailed reflection on code formatting can be found in [clean_code_formatting.md](clean_code_formatting.md).
