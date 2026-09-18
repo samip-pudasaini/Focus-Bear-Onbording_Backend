@@ -39,13 +39,15 @@ spend more time researching and understanding it myself. If the problem is
 urgent and I have already attempted to troubleshoot it, I would seek help sooner
 rather than spending too much time stuck on the same issue.
 
-# Flowchart 
+# Flowchart
 
-Created a flowchart or decision tree in Miro outlining scenarios where each resource (Google, AI tools, colleagues) would be most appropriate.
+Created a flowchart or decision tree in Miro outlining scenarios where each
+resource (Google, AI tools, colleagues) would be most appropriate.
 
-Couldnot export the flowchart in flowchart format/canvas format, so the image has been given below.
+Could not export the flowchart in flowchart format/canvas format, so the image
+has been given below.
 
-![Decision tree](<Decision_tree.png>)
+![Decision tree](./Decision_tree.png)
 
 # Reflection
 
