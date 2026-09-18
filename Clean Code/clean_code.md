@@ -725,22 +725,32 @@ undefined `console` reference) that Prettier's formatting pass would not have
 detected, which reinforced why using both tools together is useful: Prettier
 keeps style consistent, while ESLint catches actual problems in the code.
 
-## Did Formatting the Code Make It Easier to Read?
-
 Yes. After running Prettier, the code became more consistent because spacing,
-indentation, line breaks, quotation marks, and semicolon usage were
-standardised. This made the structure of the code easier to follow and reduced
-visual distractions caused by inconsistent formatting.
 
-ESLint and Prettier also demonstrated that formatting and code-quality checking
-serve different purposes. Prettier improved the presentation and consistency of
-the code, while ESLint identified the undefined `console` references. Using both
-tools together therefore provides better coverage than relying on either tool
-alone.
+## What issues did the linter detect?
+
+The linter detected two `no-undef` errors in `check.js` because ESLint did not
+recognise `console` as a defined global variable.
+
+```text
+Z:\test-repo\check.js
+
+  4:5  error  'console' is not defined  no-undef
+  6:5  error  'console' is not defined  no-undef
+
+✖ 2 problems (2 errors, 0 warnings)
+```
+
+The errors occurred on the two `console.log()` statements. I fixed this by
+installing the `globals` package and configuring ESLint to recognise Node.js
+global variables, including `console`.
+
+After the fix, running `npx eslint .` produced no errors.
 
 # Code Formatting & Style Guides
 
->Note: The detailed reflection on code formatting can be found in [clean_code_formatting.md](clean_code_formatting.md).
+> Note: The detailed reflection on code formatting can be found in
+> [clean_code_formatting.md](clean_code_formatting.md).
 
 Due to major problems in the review and checking of the issue #67 from the
 author,
@@ -753,4 +763,5 @@ full task from writing alone.
 I have moved this part of the onboarding reflection and task steps in another
 file: namely clean_code_formatting.md, (`clean_code_formatting.md`)
 
-The detailed reflection on code formatting can be found in [clean_code_formatting.md](clean_code_formatting.md).
+The detailed reflection on code formatting can be found in
+[clean_code_formatting.md](clean_code_formatting.md).
