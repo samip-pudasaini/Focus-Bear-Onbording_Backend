@@ -123,6 +123,8 @@ describe("TestAuthGuard", () => {
 | src/users/entities    | 100     | 100      | 100     | 100     |
 | user.entity.ts        | 100     | 100      | 100     | 100     |
 
+![100% test coverage for test-auth.guard.ts](test_coverage_change.png)
+
 This shows that the test-auth.guard.ts has now 100% coverage, which was improved
 from 44%
 
