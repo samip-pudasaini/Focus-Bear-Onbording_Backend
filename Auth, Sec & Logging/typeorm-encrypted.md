@@ -1,313 +1,244 @@
-# Tasks
+# Field-Level Encryption in NestJS with `typeorm-encrypted`
 
-## How role-based access control (RBAC) works in Auth0
+## Research: how `typeorm-encrypted` works and why it's needed
 
-Role-based access control (RBAC) is an authorization strategy to assign
-permissions to users based on defined roles in an organization. It offers a
-simple, manageable approach to access management that is less prone to error
-than assigning permissions to users individually.
+`typeorm-encrypted` encrypts individual entity fields inside the application
+before they are written to the database, and decrypts them when they are read
+back. The database only ever stores ciphertext for those columns.
 
-When using RBAC for Role Management, you analyze the needs of your users and
-group them into roles based on common responsibilities. You then assign one or
-more roles to each user and one or more permissions to each role. The user-role
-and role-permissions relationships make it simple to perform user assignments
-since users no longer need to be managed individually, but instead have
-privileges that conform to the permissions assigned to their role(s). For
-example, if you were using RBAC to control access for an HR application, you
-could give HR managers a role that allows them to update employee details, while
-other employees would be able to view only their own details. When planning your
-access control strategy, it’s best practice to assign users the fewest number of
-permissions that allow them to get their work done.
+It hooks into TypeORM in two ways:
 
-## How to retrieve user roles from Auth0’s access token
+- **Transformers** (`EncryptionTransformer`, `JSONEncryptionTransformer`): a
+  TypeORM column `transformer` whose `to()` encrypts on save and `from()`
+  decrypts on load.
+- **Subscriber** (`ExtendedColumnOptions` + `AutoEncryptSubscriber`): mark a
+  column with an `encrypt` option and register the subscriber on the connection;
+  it encrypts and decrypts around save and fetch.
 
-You cannot natively read user roles directly from an Auth0 access token because
-Auth0's standard access token design maps permissions (permissions) rather than
-raw roles (roles) under its Core RBAC implementation.
+Both use symmetric encryption from Node's `crypto` module (e.g. `aes-256-cbc` or
+`aes-256-gcm`) with a secret key.
 
-We can see the user roles from Auth0 dasboard by going to user mangement, and if
-the user is added to any role, it can be seen in the Roles heading,
-![Retrieving](Role.png)
+**Why it's needed:** database-level encryption (disk or TDE) protects against a
+stolen disk or backup, but anyone who can query the database (a leaked
+connection string, SQL injection, an over-privileged admin, a log or dump) still
+sees plaintext. Encrypting the field in the application means the database never
+holds the readable value.
 
-One of the other option is
+## Implement in a NestJS entity
 
-### Permissions
+```bash
+npm i typeorm-encrypted dotenv
+```
 
-### Roles as a custom claim
+Generate a 32-byte key (64 hex characters for AES-256) and keep it out of git:
 
-If you need role names in the token, add a post-login Action (Actions -> Flows
--> Login):
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
-```js
-exports.onExecutePostLogin = async (event, api) => {
-  const namespace = "https://myapp.example.com";
-  const roles = event.authorization?.roles ?? [];
-  api.accessToken.setCustomClaim(`${namespace}/roles`, roles);
+```
+# .env (git-ignored)
+ENCRYPTION_KEY=<64 hex characters>
+```
+
+```ts
+// encryption.config.ts
+import "dotenv/config"; // entities load before ConfigModule, so load env here
+
+if (!process.env.ENCRYPTION_KEY) {
+  throw new Error("ENCRYPTION_KEY is not set");
+}
+
+export const encryptionConfig = {
+  key: process.env.ENCRYPTION_KEY,
+  algorithm: "aes-256-cbc",
+  ivLength: 16,
 };
 ```
 
-- The claim name must be namespaced with a URL you control (it doesn't need to
-  resolve), or Auth0 silently drops it.
-- The user must log in again to get a token with the new claim.
+```ts
+// user.entity.ts
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { EncryptionTransformer } from "typeorm-encrypted";
+import { encryptionConfig } from "./encryption.config";
 
-The token then contains:
+@Entity("users")
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-```json
-{
-  "sub": "auth0|123",
-  "https://myapp.example.com/roles": ["admin"]
+  @Column()
+  email: string; // stays plaintext (searchable)
+
+  @Column({
+    type: "varchar",
+    nullable: true,
+    transformer: new EncryptionTransformer(encryptionConfig),
+  })
+  ssn: string; // encrypted before it reaches the database
 }
 ```
 
-### Reading the claim in NestJS
+No other change is needed in services: `repo.save()` and `repo.find()` work as
+normal and the field is encrypted or decrypted automatically.
 
-In the JWT strategy, `validate()` receives the verified payload. Whatever it
-returns becomes `req.user`:
+Alternative: use
+`@Column(<ExtendedColumnOptions>{ type: 'varchar', encrypt: {...} })` and
+register `AutoEncryptSubscriber` in `subscribers` when configuring
+`TypeOrmModule.forRoot()`.
 
-```ts
-validate(payload: Record<string, any>) {
-  return {
-    userId: payload.sub,
-    permissions: payload.permissions ?? [],
-    roles: payload['https://myapp.example.com/roles'] ?? [],
-  };
-}
-```
+## How encryption keys are managed and stored
 
-In a controller:
+- The key is **not** in the entity or the repo. It is read from an environment
+  variable (`process.env.ENCRYPTION_KEY`), which the package's own docs
+  recommend over hard-coding.
+- Locally it lives in a git-ignored `.env`. Commit only `.env.example` with a
+  placeholder.
+- In production it should come from a secret manager (e.g. AWS Secrets Manager,
+  GCP Secret Manager, Azure Key Vault) injected at deploy time, and be stored
+  separately from the database and its backups. Someone who steals a DB backup
+  should not also get the key.
+- Use a different key per environment (dev, staging, prod).
+- If the key is lost, the data is unrecoverable. If it leaks, all data encrypted
+  with it is exposed.
+- **Rotation:** changing the key means existing rows can't be decrypted with the
+  new one. Decrypt with the old key and re-encrypt with the new key in a
+  migration or script, and take a backup first.
 
-```ts
-@Get('reports')
-@UseGuards(AuthGuard('jwt'))
-list(@Req() req: { user: { permissions: string[] } }) {
-  if (!req.user.permissions.includes('read:reports')) {
-    throw new ForbiddenException(); // 403
-  }
-  return [];
-}
-```
+## Test encrypting and decrypting a field
 
-- Invalid or missing token returns **401** (from `AuthGuard`).
-- Valid token but missing permission returns **403** (from check).
+The check is: the repository returns plaintext, but a raw SQL query shows
+ciphertext.
 
-### Which one to use
-
-| Approach             | Claim               | Setup                                         | Best for                          |
-| -------------------- | ------------------- | --------------------------------------------- | --------------------------------- |
-| Permissions          | `permissions`       | Enable RBAC + Add Permissions in Access Token | Authorization checks in the API   |
-| Roles (custom claim) | `https://.../roles` | Post-login Action                             | Showing role names, coarse checks |
-
-Prefer permissions for access control. It's the model Auth0 is designed around,
-and code doesn't depend on role names.
-
-### Pitfalls
-
-- Never trust a decoded but unverified token. Always verify the signature
-  server-side.
-- Roles and permissions are a snapshot from login time, so role changes only
-  apply when the token is refreshed.
-- If `permissions` is empty, check that the user has a role, the role has
-  permissions from this API, and the token was requested with the correct
-  `audience`.
-
-## Implementing a NestJS guard to enforce RBA
+Install: `npm i -D sql.js`
 
 ```ts
-// roles.decorator.ts
-import { SetMetadata } from "@nestjs/common";
+// user.entity.spec.ts
+import { DataSource } from "typeorm";
+import { User } from "./user.entity";
 
-export const ROLES_KEY = "roles";
-export const Roles = (...roles: string[]) => SetMetadata(ROLES_KEY, roles);
-```
+describe("User.ssn encryption", () => {
+  let ds: DataSource;
 
-```ts
-// roles.guard.ts
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
-import { ROLES_KEY } from "./roles.decorator";
+  beforeAll(async () => {
+    ds = new DataSource({
+      type: "sql.js",
+      entities: [User],
+      synchronize: true,
+    });
+    await ds.initialize();
+  });
 
-@Injectable()
-export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  afterAll(() => ds.destroy());
 
-  canActivate(ctx: ExecutionContext): boolean {
-    const required = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
-      ctx.getHandler(),
-      ctx.getClass(),
+  it("stores ciphertext but returns plaintext", async () => {
+    const repo = ds.getRepository(User);
+    const saved = await repo.save({ email: "a@b.com", ssn: "123-45-6789" });
+
+    // through TypeORM: decrypted
+    const found = await repo.findOneByOrFail({ id: saved.id });
+    expect(found.ssn).toBe("123-45-6789");
+
+    // raw SQL: encrypted
+    const [raw] = await ds.query("SELECT ssn FROM users WHERE id = ?", [
+      saved.id,
     ]);
-    if (!required?.length) return true; // no @Roles() means any authenticated user
-
-    const { user } = ctx.switchToHttp().getRequest();
-    return required.some((role) => user?.roles?.includes(role));
-  }
-}
+    expect(raw.ssn).not.toBe("123-45-6789");
+    expect(raw.ssn).not.toContain("6789");
+  });
+});
 ```
 
-Usage: In controller:
+Set `ENCRYPTION_KEY` for tests (e.g. `setupFiles` in the Jest config that
+assigns a dummy 64-hex-character key), and install `sqlite3` as a dev
+dependency. Manual check: save a row, then run `SELECT ssn FROM users` in the DB
+client and confirm the value is unreadable.
 
-```ts
-@Controller("admin")
-@UseGuards(AuthGuard("jwt"), RolesGuard) // authenticate first, then authorize
-export class AdminController {
-  @Get("users")
-  @Roles("admin")
-  listUsers() {
-    return [];
-  }
+Run test using: `npm test -- user.entity.spec`
 
-  @Delete("users/:id")
-  @Roles("admin", "superadmin") // any of these roles
-  remove() {}
-}
+result:
 ```
+PS Z:\test-project-nestjs\nestjs-project> npm test -- user.entity.spec
 
-This relies on validate() in the JWT strategy exposing roles on req.user:
-`roles: payload['https://myapp.example.com/roles'] ?? [],`
+> nestjs-project@0.0.1 test
+> node --experimental-vm-modules ./node_modules/jest/bin/jest.js user.entity.spec
 
-- Guard order matters. AuthGuard('jwt') must run first, otherwise req.user is
-  undefined.
-- getAllAndOverride lets a method-level @Roles() override a class-level one.
-- Any vs all: some means any listed role is enough. Use every to require all.
-- Status codes: returning false gives a 403, and a missing or invalid token
-  gives a 401 from AuthGuard.
-- Global registration: to apply it everywhere, add { provide: APP_GUARD,
-  useClass: RolesGuard } to your module providers. Register the JWT guard the
-  same way, before it.
+  console.error
+    ◇ injected env (1) from .env
 
-## Protect an API endpoint based on user roles
+      at z (node_modules/dotenv/dist/index.cjs:7:300)
+      at Object.ee [as configDotenv] (node_modules/dotenv/dist/index.cjs:7:1145)
+      at Object.te [as config] (node_modules/dotenv/dist/index.cjs:7:1253)
+      at Object.<anonymous> (node_modules/dotenv/dist/config.cjs:1:24)
+      at Object.<anonymous> (src/users/entities/Z:/test-project-nestjs/nestjs-project/src/users/entities/encryption.config.ts:2:1)
+      at Object.<anonymous> (src/users/entities/Z:/test-project-nestjs/nestjs-project/src/users/entities/user.entity.ts:4:1)
+      at Object.<anonymous> (src/users/entities/Z:/test-project-nestjs/nestjs-project/src/users/entities/user.entity.spec.ts:3:1)
 
-Using the Roles decorator and RolesGuard from above:
+ PASS  src/users/entities/user.entity.spec.ts
+  User.ssn encryption
+    √ stores ciphertext but returns plaintext (22 ms)
 
-In controller:
-
-```ts
-@Controller("admin")
-export class AdminController {
-  @Get("dashboard")
-  @UseGuards(AuthGuard("jwt"), RolesGuard)
-  @Roles("admin")
-  getDashboard() {
-    return { message: "Admins only" };
-  }
-}
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        0.638 s, estimated 1 s
+Ran all test suites matching user.entity.spec.
+PS Z:\test-project-nestjs\nestjs-project> 
 ```
+![test ran](image.png)
 
-There is a shortcut, so we don't need to repeat the three decorators on every
-route:
+## Reflection
 
-```ts
-// auth.decorator.ts
-import { applyDecorators, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
+### Why does Focus Bear double encrypt sensitive data instead of relying on database encryption alone?
 
-export const Auth = (...roles: string[]) =>
-  applyDecorators(UseGuards(AuthGuard("jwt"), RolesGuard), Roles(...roles));
-```
+Database encryption (disk or managed-DB encryption at rest) only protects the
+storage layer: a stolen disk, snapshot or backup. Once the database is running
+and someone connects, it transparently decrypts everything, so it does nothing
+against SQL injection, a leaked connection string, an over-privileged account,
+or data appearing in logs and dumps.
 
-So we can just use: `@Auth('admin')`
+Application-level encryption adds a second, independent layer (defense in
+depth). The database receives ciphertext, and the key lives outside the
+database, so getting into the database alone is not enough to read the sensitive
+fields. This matters especially for a product like Focus Bear's, where users
+share personal data and expect it to stay private. If one layer fails, the other
+still protects the data.
 
-```ts
-@Get('dashboard')
-@Auth('admin')
-getDashboard() {
-  return { message: 'Admins only' };
-}
-```
+### How does `typeorm-encrypted` integrate with TypeORM entities?
 
-# Reflection
+It plugs into TypeORM's existing extension points, so entities and services stay
+almost unchanged. With the transformer approach, a column gets
+`transformer: new EncryptionTransformer({...})`, and TypeORM calls it to encrypt
+the value when writing and decrypt it when reading. With the subscriber
+approach, a column declares an `encrypt` option and `AutoEncryptSubscriber`
+handles it around save and fetch. Either way, `repository.save()` and
+`repository.find()` are used as usual and the code sees plaintext, while the
+database sees ciphertext.
 
-## How does Auth0 store and manage user roles?
+### What are the best practices for securely managing encryption keys?
 
-Auth0 stores roles in the tenant, separate from the tokens. Roles are created
-under **User Management -> Roles** and assigned to users there (or through the
-Management API). Each role can hold **permissions**, which are defined on an API
-under **APIs -> your API -> Permissions**. So the relationship is: user -> role
--> permissions.
+- Never hard-code or commit keys. Load them from environment variables or,
+  better, a secret manager or KMS.
+- Store keys separately from the data and its backups.
+- Use a separate key per environment, and generate them with a secure random
+  generator (32 random bytes for AES-256).
+- Restrict who and what can read the key (least privilege) and audit access.
+- Plan for rotation: keep a way to re-encrypt existing data with a new key.
+- Back the key up securely, since losing it means losing the data.
+- Don't log keys or decrypted values.
 
-Roles are not included in the access token by default. There are two ways to get
-authorization data into it:
+### What are the trade-offs between encrypting at the database level vs. the application level?
 
-- **Permissions:** enable **RBAC** and **Add Permissions in the Access Token**
-  in the API settings. Auth0 then adds a `permissions` claim to the access
-  token.
-- **Roles as a custom claim:** add a post-login Action that copies
-  `event.authorization.roles` into the token under a namespaced claim (e.g.
-  `https://myapp.example.com/roles`). Auth0 drops non-namespaced custom claims.
+|                  | Database level (TDE, disk encryption)           | Application level (`typeorm-encrypted`)                                                                |
+| ---------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Protects against | Stolen disks, snapshots, backups                | Also DB compromise, SQL injection, curious admins, leaked dumps                                        |
+| Effort           | Mostly configuration, transparent to code       | Code changes, key management in the app                                                                |
+| Querying         | Everything works (search, sort, indexes, joins) | Can't filter, sort or search on encrypted columns, because the transformation happens outside the DBMS |
+| Performance      | Small overhead in the database                  | Encryption cost in the app on every read and write                                                     |
+| Key control      | Often held by the cloud provider or DB          | Held by you, which is more control and more responsibility                                             |
+| Scope            | Whole database                                  | Only the fields you choose                                                                             |
 
-Either way, the token is a snapshot from login time. Role changes in the
-dashboard only reach the user after the token is refreshed or they log in again.
-
-## What is the purpose of a guard in NestJS?
-
-A guard decides whether a request may reach a route handler. It implements
-`CanActivate` and returns `true` (continue) or `false` (rejected with 403).
-Guards run after middleware and before pipes and interceptors, and they have
-access to the `ExecutionContext`. That means they can read route metadata (such
-as `@Roles('admin')`) through `Reflector`.
-
-Guards keep authorization out of business logic. Instead of repeating an `if`
-check in every handler, the rule is declared once as a decorator and enforced in
-one place. In this setup, `AuthGuard('jwt')` handles authentication (who are
-you? -> 401) and `RolesGuard` handles authorization (are you allowed? -> 403).
-
-## How would you restrict access to an API endpoint based on user roles?
-
-1. Expose the roles on `req.user` in the JWT strategy's `validate()`:
-
-```ts
-validate(payload: Record<string, any>) {
-  return {
-    userId: payload.sub,
-    roles: payload['https://myapp.example.com/roles'] ?? [],
-  };
-}
-```
-
-2. Create a `@Roles()` decorator that stores the required roles as metadata.
-3. Create a `RolesGuard` that reads that metadata and compares it with
-   `req.user.roles`:
-
-```ts
-canActivate(ctx: ExecutionContext): boolean {
-  const required = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
-    ctx.getHandler(),
-    ctx.getClass(),
-  ]);
-  if (!required?.length) return true;
-  const { user } = ctx.switchToHttp().getRequest();
-  return required.some((role) => user?.roles?.includes(role));
-}
-```
-
-4. Apply both guards to the endpoint, authentication first:
-
-```ts
-@Get('dashboard')
-@UseGuards(AuthGuard('jwt'), RolesGuard)
-@Roles('admin')
-getDashboard() {
-  return { message: 'Admins only' };
-}
-```
-
-Result: no or invalid token gives 401, a valid token without the `admin` role
-gives 403, and an admin gets 200.
-
-## What are the security risks of improper authorization, and how can they be mitigated?
-
-Broken access control is the top item in the OWASP Top 10. Main risks and
-mitigations:
-
-| Risk                                                          | Mitigation                                                                                                         |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Endpoint left unprotected by mistake                          | Register the auth guards globally (`APP_GUARD`) and opt out with a `@Public()` decorator, so the default is closed |
-| Trusting an unverified token                                  | Always verify signature, `iss`, `aud` and expiry server-side (JWKS + `passport-jwt`)                               |
-| Enforcing access only in the frontend                         | Hiding UI is cosmetic. The API must enforce every rule                                                             |
-| Privilege escalation (users getting roles they shouldn't)     | Assign roles only from the Auth0 dashboard or a restricted Management API client, never from user input            |
-| Stale roles after a role is removed                           | Use short token lifetimes and refresh tokens so changes apply quickly                                              |
-| Horizontal access (user A reading user B's data, IDOR)        | Roles aren't enough. Also check ownership of the resource in the handler or service                                |
-| Over-broad roles                                              | Least privilege: fine-grained permissions like `read:reports` instead of a catch-all `admin`                       |
-| Silent misconfiguration (wrong claim name, missing namespace) | Fail closed: with no roles the guard denies access. Test both the allowed and denied cases                         |
-
-Overall: verify every token, deny by default, enforce on the server, and grant
-only the minimum access needed.
+Because of these trade-offs, encrypt only the genuinely sensitive fields at the
+application level, keep searchable fields like email in plaintext, and use
+database-level encryption as the baseline for everything else. Using both is the
+double-encryption approach.
