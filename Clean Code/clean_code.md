@@ -715,6 +715,80 @@ const user = {
 const getName = (user) => user.name;
 ```
 
+## ESLint and Prettier Fixes Summary
+
+This summary lists the exact issues ESLint and Prettier reported and how each
+was fixed. The full evidence (install commands, config files, terminal output
+and screenshots) is in [clean_code_formatting.md](clean_code_formatting.md).
+
+### ESLint fixes
+
+- **Missing `eslint.config.js`:** After installing ESLint
+  (`npm install --save-dev eslint` and `@eslint/js`), my first `npx eslint .`
+  run failed with "ESLint couldn't find an eslint.config.\* file". The project
+  had no ESLint configuration yet, so I had to create `eslint.config.js` using
+  the flat config format, starting with `eslint.configs.recommended` from
+  `@eslint/js`.
+- **`console` flagged by `no-undef`:** With the config in place, ESLint reported
+  two errors in `check.js` (`4:5` and `6:5`), both
+  `'console' is not defined  no-undef`, one for each `console.log()` call. The
+  recommended rules do not know about Node.js globals, so `console` was treated
+  as an undefined variable.
+- **Configuration change that fixed it:** I installed the `globals` package
+  (`npm install --save-dev globals`), imported it in `eslint.config.js`, and
+  added `languageOptions: { globals: globals.node }`. This tells ESLint that
+  Node.js globals, including `console`, exist. Running `npx eslint .` again then
+  produced no output, meaning no errors.
+- **Other ESLint issues:** No other ESLint errors were reported. Node also
+  printed a `MODULE_TYPELESS_PACKAGE_JSON` warning suggesting `"type": "module"`
+  in `package.json`, but that was a warning rather than an ESLint error and I
+  did not record a change for it, so I am not counting it as a fix.
+
+Final `eslint.config.js`:
+
+```js
+//eslint.config.js
+import eslint from "@eslint/js";
+import globals from "globals";
+
+export default [
+  eslint.configs.recommended,
+  {
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+];
+```
+
+### Prettier fixes
+
+- I installed Prettier and created a `.prettierrc` with `"singleQuote": true`,
+  `"semi": true` and `"tabWidth": 2`.
+- `npx prettier . --check` reported "Code style issues found in 3 files":
+  `.prettierrc`, `check.js` and `eslint.config.js`.
+- `npx prettier . --write` then reformatted those three files.
+  `package-lock.json`, `package.json` and `README.md` were reported as
+  unchanged.
+- **Quote style:** The formatting change I recorded was double quotes being
+  converted to single quotes in `check.js` (for example the `"John"` and
+  `"Hello, John!"` string literals), as required by `singleQuote: true`.
+- **Semicolons, spacing and indentation:** The config enforces semicolons and
+  2-space indentation, but `check.js` already used both, so my before/after
+  example does not show any semicolon, spacing or indentation changes. Quote
+  style is the only Prettier change I have evidence for.
+
+### Readability improvement
+
+Running both tools made the code more consistent and easier to maintain, and
+each tool did a different job. ESLint caught a real problem (`console` being
+flagged by `no-undef`) that could have caused bugs if left unnoticed, while
+Prettier standardised the surface style (single quotes, with semicolons and
+2-space indentation now enforced by the config). With one agreed style in every
+file, a reader does not have to mentally parse a mix of styles and can focus on
+the logic, and version control diffs show real logic changes rather than
+formatting noise.
+
 ## Did formatting the code make it easier to read?
 
 Yes. After running Prettier, the code became more consistent because spacing,
