@@ -18,11 +18,7 @@
 | **26 Oct (Wk 12)**         | Tue (12-5)pm, Wed (12-5)pm, Thu (1-3)pm  | 12                     |       Online |
 | **Total Internship Hours** |                                          | **131.56**             |
 
-Note: Hours may exceed or not fulfilled on certain week.
-
-On thursdays and fridays, I am typically available to 3 pm but I might have some
-errards on some weeks. When required, I will put work on those days, to achiecve
-the required hours for my internship.
+Note: Hours may exceed or not be fulfilled on certain week.
 
 ## Time Tracking
 
