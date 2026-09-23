@@ -1,202 +1,162 @@
-# Company reflection
+# Focus Bear Reflection
+
+# Part 1: Company Reflection
 
 ## Why do you think Focus Bear was created?
 
-Our Founder and CEO, Jeremy Nagel was late-diagnosed with ADHD. He had tried
-every app, every system. So he built the thing he actually needed, something
-that starts the morning and then blocks the rabbit holes before you can fall in,
-and forgives me when I slip. Focus Bear is a tool that is built by ADHD brains.
-It reduces decisions, removes the willpower tax, and guides you one step at a
-time instead of handing you a blank to-do list.
+Our founder and CEO, Jeremy Nagel, was diagnosed with ADHD late in life. He had tried every app and every system. So he built the tool he actually needed: something that starts the morning, blocks the rabbit holes before you fall in, and forgives you when you slip.
+
+Focus Bear is built by ADHD brains. It reduces decisions, removes the willpower tax, and guides you one step at a time instead of handing you a blank to-do list.
 
 ## What problem is Focus Bear solving?
 
-Focus Bear is solving the difficulty people with ADHD can have with maintaining
-focus, managing distractions, and sticking to routines. It provides tools that
-help users reduce digital distractions, establish structured routines, and stay
-focused on tasks without relying entirely on willpower or motivation.
+Focus Bear helps people with ADHD who struggle to stay focused, manage distractions, and stick to routines. It gives users tools to reduce digital distractions, build structured routines, and stay on task without relying on willpower or motivation.
 
 ## Why do you think this mission is important?
 
-As someone who has been observing himself for doubts regarding having ADHD, the
-mission is very personal to me. ADHD is more of 'executive dysfunction' than
-hyperactivity or lack of focus. Being torn between doing many tasks, or events
-that are going to happen further in a day gives us choice paralysis. In turn, we
-become unable to do anything because of the lack of proper time evaluation. So
-the fact that we are trying to combat this with giving set focus times with
-blockage and some sort of routine, which are more harder to skip, makes it
-easier to work on. This is something I have experienced myself.
+The mission is very personal to me. I have been observing myself for signs of ADHD.
+
+ADHD is more about executive dysfunction than hyperactivity or a lack of focus. When I am torn between many tasks, or worried about events later in the day, I get choice paralysis. I then cannot do anything, because I cannot judge how much time each task needs.
+
+Focus Bear tackles this with set focus times, blocking, and routines that are harder to skip. That makes it easier to start working. I have experienced this myself.
 
 ## How does Focus Bear's work align with your personal values or interests?
 
-As mentioned above, as someone with self-diagnosis of ADHD, it took me years of
-self doubt and worthlessness to finally stumbling upon this condition. If I had
-known earlier, it would have not affected my studies, as I was doing well. But
-it would have done wonders for my mental health. From my experience with the app
-and my own pattern, I require flexibility to work, listening to music. I have
-also seen my cousin with ADHD require a restrictive system. So the fact that we
-are assisting people with work and giving them autonomy to block distracting
-app, while also giving them flexibility by the timer and the indication of task
-alignment, it is something very personally related. It works with my values and
-interest regarding my brain.
+I self-diagnosed with ADHD. It took me years of self-doubt and feeling worthless before I found this explanation. If I had known earlier, my studies would not have been affected, as I was doing well. It would also have done wonders for my mental health.
+
+From my experience with the app and my own patterns, I need flexibility to work, such as listening to music. My cousin, who also has ADHD, needs a more restrictive system.
+
+Focus Bear supports both. Users can block distracting apps, and they also get flexibility through the timer and the task-alignment indicator. This is personally relevant to me and matches my values.
 
 ## Personal connection
 
-When it comes to the challenges of a neurodivergent mind, I am well experienced
-in that area. From the constant breakdown of not being able to reply to
-messages, not being able to start a task a few weeks before the due date, and
-letting the pressure and chaos of the deadline making me rush to start and
-finish the tasks. So, I can personally relate to any of the challenges that
-Focus Bear aims to solve.
+I know the challenges of a neurodivergent mind well. I have struggled to reply to messages and to start a task weeks before the due date. I then rush to start and finish it under the pressure and chaos of the deadline. I can relate to the challenges Focus Bear aims to solve.
 
-## Specific Life example
+## Specific life example
 
-As I have said, with ADHD, the hard part is getting started, and well, taking a
-break afterwards as well. When there was no clear distinction I would just shut
-down.
+With ADHD, the hard part is getting started. Taking a break afterwards is also hard. When there is no clear line between work and rest, I shut down.
 
-What I mean by this is that I have studied for like 2-3 hours and brain is
-overwhelmed and need rest. But that guilt of not studying makes it harder to
-rest, and if rest begins, the study might not be resumed after the break.
+For example, I might study for 2-3 hours until my brain is overwhelmed and needs rest. But the guilt of not studying makes it hard to rest. If I do rest, I may not go back to studying.
 
-So the indication of time to work and time to rest will make it such that I
-would not be overwhelmed and also be able to work/rest. This is what the desired
-circumstances should be.
+A clear signal for when to work and when to rest would stop me from feeling overwhelmed. It would let me do both properly. This is the outcome I want.
 
-# First Time user Experience
+---
 
-Doing it in Windows in a portable laptop (ASUS tuf a15)
+# Part 2: First-Time User Experience
 
-- Asks for sign up using google, apple or using email
+**Device and OS:** Windows, on a portable laptop (ASUS TUF A15)
 
-- Asks for setting up distraction blocking
-  ![blocking distraction options](distraction_blocking.png)
+## What I did
 
-- Step one: ![Asks your purpose](step_1.png)
+1. Signed up using Google, Apple, or email.
+2. Set up distraction blocking.
+   ![Blocking distraction options](distraction_blocking.png)
+3. Step one: chose my purpose.
+   ![Asks your purpose](step_1.png)
+4. Chose whether to use AI to block distractions. The app states that the AI never records our information, browsing stays private, and the feature is optional.
+5. Allowed website blocking. I chose what to block and what to allow, for example YouTube Music or Spotify.
+   ![Allows blocking of websites](block_website.png)
+   ![Websites that are not blocked](website_allowed.png)
+6. Scheduled blocking, for example during work hours.
+   ![Scheduled blocking](block_schedule.png)
+7. Chose a strictness level that suits my preference.
+8. Set up habits.
 
-- Gives option to use AI to block distractions?: We are made aware that the AI
-  will never record our information, the browsing is private and the feature is
-  optional.
+## Pain points and confusing parts
 
-- Allow website blocking: chose what to block and what not to block, for example
-  youtube music or spotify. ![allows blocking of website](block_website.png)
-  ![which websites are not blocked](website_allowed.png)
+### 1. Brain Dump has no way to save notes for later
 
-- Allow scheduling of blocking (for example, for blocking while at work hours)
-  ![scheduled blocking](block_schedule.png)
+I can type into the Brain Dump, but there is no option to save the text as a note. I can manually add notes that I already planned to keep. But thoughts that appear while my mind wanders during a focus session cannot be saved. The only way to keep them is to copy the text somewhere else.
 
-- Ability to choose strictness level according to your preference.
+The text is kept while I work, but it is not saved as a separate note like the ones shown in the image.
 
-- Allows setting up habits.
+![Brain Dump](brain_dump.png)
 
-## Pain Points/Confusing part:
+**Suggestion:** Add a "Save as note" button to the Brain Dump.
 
-### Brain Dump:
+### 2. The TOP score is hard to understand
 
-For brain dump, I can write in te but there is no option to save it for later.
-We do have an option to manually add notes that we already know that we want.
-But the ones we have not planned to save, and was filled during focus hour when
-the mind was wondering. The only way to save it is to copy the text to another
-place.
+When I add a task, I can enter a "perspiration" value, but the app does not explain what it means. A higher TOP score should mean a higher priority, but I cannot tell how the inputs affect it.
 
-![brain Dump](brain_dump.png)
+For example: if perspiration is 2 weeks and the due date is tomorrow, does that mean I have already worked on the task for 2 weeks? I could not tell.
 
-It is saved while working, but not in a different note, like the one seen in the
-image.
+![TOP score confusion](TOP_score.png)
 
-### The TOP Score
+**Suggestion:** Add a short explanation or tooltip beside "perspiration" and the TOP score. It should include one worked example.
 
-The calculation of the TOP score is the problem that I am facing. In here, I can
-add a perspiration, and it doesnot actually describe what it means.
+### 3. Micro breaks need habits before they work
 
-Also the score is supposed to mean that the higher priority it is the more it
-has a score, but its still confusing, does it think that if Perspiration is 2
-weeks, and due date is tomorrow, that means that I have worked on it 2 weeks??.
-SO this part is confusing for me.
+Even after I enabled micro breaks, I had to add habits before I could use the feature. Sometimes I just want to do nothing or take a free-form break. I would expect that to be the default when no micro break activities are set up.
 
-![Top score confusion](TOP_score.png)
+![Micro break option](micro_breaks.png)
 
-### Micro Breaks
+**Suggestion:** Default to a free-form break when no micro break habits exist.
 
-For micro breaks, we need to add habits before we can actually use the feature,
-even when we enabled it. Sometimes we need just do nothing or free form, which I
-would think would be default when there was no micro break activities set up.
+### 4. Focus Music does not support music with lyrics or linked services
 
-![micro break option](micro_breaks.png)
+Some people, including me, need music with lyrics, or classical music, to work well. It would help if the app could link to Spotify or YouTube Music. The user could then keep control over what kind of music plays.
 
-### Focus Music
+![Focus Music](Focus_music.png)
 
-For some people, including me, require music with lyrics, and include classicals
-and ones, to actually work well. If there was an option to link spotify or
-youtube music and have strict observation of what the music should be like, I
-think that is more helpful.
+**Suggestion:** Allow linking Spotify or YouTube Music for focus sessions.
 
-![Focus_Music](Focus_music.png)
+### 5. No way to add long-term goals on the Motivation page
 
-### The Motivation Page
-
-In the motivation page, in your goals, I haven't found anyway to add the long
-terms goals, there are no option in this window, And there should be option to
-add it in the window if nothing has been set yet.
+Under "Your goals" on the Motivation page, I could not find a way to add long-term goals. There is no option in that window. When no goals have been set yet, the window should offer a way to add one.
 
 ![Motivation goals](Your_goals.png)
 
-## Improvement in onboarding.
+**Suggestion:** Show an "Add a goal" button when the goals list is empty.
 
-In terms of onboarding, I think that it is pretty good, just more information
-about actually putting the proof of the tasks that have been done. More
-clarification on where we should include screenshots, so the bot does not flag
-it. And for the "Clean Code" milestone, making issues #67 and #73 in a different
-file, not in the same clean_code.md. This makes it harder to actually review it,
-especially when the bot can only read until a limit of characters/lines.
+## Improvements to the onboarding program
 
-## Logged bug
+Overall, I think the onboarding is good. Two things would make it clearer:
 
-I loggeed an issue in the focus logs and have submitted the bug report.
-![bug report](image.png)
+- **Proof of completed tasks:** Explain where to include screenshots so the review bot does not flag them.
+- **Clean Code milestone:** Put issues #67 and #73 in separate files instead of one `clean_code.md`. The bot can only read up to a limit of characters or lines, so one long file is harder to review.
 
-# Get to know the Focus Bear product reflecting my roles (backend devloper intern)
+## Bug logged in team.focusbear.io
 
-## 3 things I learned
+**Bug summary:** Duplicate manual entries with the same start time and end time.
 
-- The app doesn't just run a timer - it decides what counts as "tasks". When in
-  focus session, Focus Bear looks at every site that are opened and descides
-  whether it aligns with your current objective or not, displaying a alignment
-  score. This is done using AI plus the block/allow lists that has been set up,
-  which prompts us if we try to access the blocked website.
+**Outcome:** The team reviewed it and decided it was not an actual issue to manage.
 
-- Morning and evening routines are not optional. You can not skip past the set
-  up habit routine naturally and get on with your day. The apps blocks the rest
-  of your computer until its been gone through, or you decide to skip with the
-  skip button. That means somewhere behind the scenes, the app has to track
-  exactly which habits are required, which are skippable, and whether you've
-  actually gone through each one, which is more complex than it looks from the
-  outside.
+![Bug report](image.png)
 
-- The app remembers your patterns over time. At the end of the day, you get a
-  report showing your focus sessions, the breaks taken and the habits
-  participation. means the app is quietly logging everything you do throughout
-  the day so it can be summarized later, a diary that writes itself.
+---
 
-- It has to work the same way, no matter which device you're on. Whether you're
-  on your phone or your laptop, the settings, streaks and block lists all need
-  to match up. That sounds simple, but it means the system has to carefully keep
-  everything in sync across devices, and handle it gracefully if you change
-  something on one device while offline on another.
+# Part 3: Getting to Know the Focus Bear Product (Backend Developer Intern)
 
-# Reflection
+## 4 things I learned
 
-## What did I learn that I didn't know before?
+### 1. The app decides what counts as a task
 
-I found out many of the qualities of the application which make it more
-supportive than restrictive are hidden under the covers and not visible in the
-user interface. It is not only the nice UI elements like checking for the
-distracting website, but also the decisions made by the application constantly.
-This included detecting the approaching deadline for an event, which determine
-its overall usefulness or uselessness.
+- **What I learned:** In a focus session, Focus Bear checks each site that I open. It decides whether the site matches my current objective and shows an alignment score. It uses AI plus my block and allow lists. It prompts me if I try to open a blocked website.
+- **Why it matters to my backend role:** The app needs a reliable way to compare a user's stated objective with their activity. It also needs to store and apply each user's block and allow lists. I have not seen how this works inside the code, so I want to learn how the alignment check is built.
+
+### 2. Morning and evening routines are not optional
+
+- **What I learned:** I cannot skip the habit routine and go straight into my day. The app blocks the rest of my computer until I complete the routine or press the skip button.
+- **Why it matters to my backend role:** The backend likely needs to record which habits are required, which can be skipped, and whether each one was completed. That is more complex than it looks from the outside.
+
+### 3. The app remembers my patterns over time
+
+- **What I learned:** At the end of the day, I get a report on my focus sessions, breaks, and habit participation.
+- **Why it matters to my backend role:** The app must log each user's activity during the day so it can be summarised later. This needs careful data storage and querying.
+
+### 4. Settings should be the same on every device
+
+- **What I learned:** Focus Bear is available on more than one device. I have only tested it on my Windows laptop, so this is my assumption about how it works.
+- **Why it matters to my backend role:** If settings, streaks, and block lists are shared across devices, the backend must keep them in sync. It would also need to handle changes made on one device while another is offline.
+
+---
+
+# Part 4: Reflection
+
+## What did I learn that I did not know before?
+
+Many of the features that make the app supportive rather than restrictive are hidden behind the interface. The app is not only a set of nice UI elements, such as blocking distracting websites. It also makes decisions all the time, such as judging whether an activity is useful for my current objective.
 
 ## Did I spot anything in the help centre that seems out of date or inconsistent?
 
-From my observation, the key features and tutorials remain consistent. The
-articles are made using images from mac, which might have some changes but in
-windows, I see no changes.
+The key features and tutorials are consistent with what I saw. The help articles use images from macOS. I use Windows, and I did not see any differences in the steps.
